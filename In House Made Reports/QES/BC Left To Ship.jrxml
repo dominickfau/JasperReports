@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BC Left To Ship" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5e031e37-16e4-4a0f-a4f5-9309e8df2c06">
+	<property name="ireport.zoom" value="1.6105100000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#73E6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFE6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="customerID" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateRange1" class="java.util.Date"/>
+	<parameter name="dateRange2" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT so.num AS sonum,customer.name AS 'Customer', product.num AS productnum, product.description,
+    SUM(((COALESCE(soitem.qtytofulfill,0) * COALESCE(uomconversion.multiply,1)) / COALESCE(uomconversion.factor,1)) -
+    (CASE WHEN soitem.qtyfulfilled = 0
+        THEN 0
+    ELSE ((COALESCE(soitem.qtyfulfilled,0) * COALESCE(uomconversion.multiply,1)) / COALESCE(uomconversion.factor,1))
+    END)) AS 'Qty To Ship',
+    DATE_FORMAT(soitem.dateScheduledFulfillment,'%m/%d/%Y') AS 'Due Date', SUM(soItem.totalPrice) as totalPrice
+
+FROM soitem
+    INNER JOIN so ON so.id = soitem.soid
+    INNER JOIN product ON product.id = soitem.productid
+    INNER JOIN customer ON customer.id = so.customerid
+    INNER JOIN uom ON product.uomid = uom.id
+    LEFT OUTER JOIN uomconversion ON (product.uomid = uomconversion.touomid AND soitem.uomid = uomconversion.fromuomid)
+
+WHERE soitem.typeid = 10
+  AND soitem.statusid < 50
+  AND so.statusid IN (20,25)
+  AND product.num LIKE '5%'
+  AND customer.id LIKE $P{customerID}
+  AND soitem.dateScheduledFulfillment BETWEEN
+     $P{dateRange1} AND $P{dateRange2}
+
+GROUP BY product.num
+
+ORDER BY soitem.dateScheduledFulfillment, product.num]]>
+	</queryString>
+	<field name="sonum" class="java.lang.String"/>
+	<field name="Customer" class="java.lang.String"/>
+	<field name="productnum" class="java.lang.String"/>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Qty To Ship" class="java.lang.Double"/>
+	<field name="Due Date" class="java.lang.String"/>
+	<field name="totalPrice" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="ReportTotal" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalPrice}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<title>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="168" y="0" width="236" height="25" uuid="4b096410-7620-4582-9cd3-3672cb621d5b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[BC Left To Ship]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="92" y="32" width="80" height="12" uuid="4ec28abb-e8b7-4c35-b39e-2cfefa4c9971"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Part #]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="501" y="0" width="71" height="12" uuid="218e8941-9776-4297-b458-d7a43cddb344"/>
+				<textElement verticalAlignment="Top">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="415" y="0" width="86" height="12" uuid="991d0ed2-0ccf-42ea-acab-b02ab512d2a8"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Report Generated At]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="443" y="12" width="58" height="15" uuid="5d25f8a9-da40-449f-a904-914c0867f5dc"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="501" y="12" width="29" height="15" uuid="a467f64c-a7ac-460f-a038-f9165c9a70bd"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="33" width="92" height="12" uuid="5d959d97-7ea8-4ac3-94e1-a16ee86a75a3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Customer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="32" width="67" height="12" uuid="8e1f01b6-b439-434b-9991-a01fbec33e17"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="439" y="33" width="66" height="12" uuid="6cc6967a-e034-4451-9912-17e5daff229a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty Left To Ship]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="172" y="33" width="220" height="12" uuid="dc60f8bc-e3ad-4e10-901f-be8d12f36c20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="92" height="15" uuid="5e452836-c597-4c20-860c-fb4bcf00676c"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Customer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="0" width="80" height="15" uuid="988062cf-c9ea-4df6-9e3c-5e292a65a986"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productnum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="172" y="0" width="220" height="15" uuid="d524ab51-cabd-4419-8363-72e356d9d92b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="439" y="1" width="66" height="15" uuid="e2b527f7-7067-42d3-88f3-5a4971f03857"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Qty To Ship}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="505" y="1" width="67" height="15" uuid="c7beb323-5206-47d3-a5e7-7214fa2f8ae0"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalPrice}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="15" width="572" height="1" uuid="c722cf79-624b-4d9b-bf33-d273ca4bea5d"/>
+			</line>
+		</band>
+	</detail>
+	<summary>
+		<band height="18">
+			<textField pattern="">
+				<reportElement x="443" y="0" width="129" height="15" uuid="7d914216-70a6-4d19-af52-bae49a9448bb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Report Total: " + $V{ReportTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="One Off 2x4 Inventory Label Avery" pageWidth="288" pageHeight="144" whenNoDataType="AllSectionsNoDetail" columnWidth="270" leftMargin="9" rightMargin="9" topMargin="9" bottomMargin="9" uuid="90e41a1c-e301-4ced-ba5a-5a75faf0a025">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="default" isDefault="true" fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="18" fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="style1" hAlign="Center" vAlign="Middle"/>
+	<parameter name="REPORTDESCRIPTION" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Part Barcodes for 2x4 Avery 8163 Labels"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="partNum" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA['%']]></defaultValueExpression>
+	</parameter>
+	<parameter name="module" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT part.num AS partNum, part.description AS partDescription, location.name AS locationName
+FROM part
+JOIN defaultlocation ON part.id = defaultlocation.partId
+JOIN location ON defaultlocation.locationId = location.id
+WHERE part.activeFlag = 1 AND num LIKE $P{partNum}]]>
+	</queryString>
+	<field name="partNum" class="java.lang.String"/>
+	<field name="partDescription" class="java.lang.String"/>
+	<field name="locationName" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="126">
+			<textField>
+				<reportElement x="0" y="0" width="270" height="25" uuid="8de96575-6143-4809-81f7-619a9982165d"/>
+				<textElement textAlignment="Center" rotation="None">
+					<font fontName="Arial" size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="25" width="270" height="25" uuid="65ccb00c-9e01-4685-a26a-0d5fb654ed19"/>
+				<textElement textAlignment="Center" rotation="None">
+					<font fontName="Arial" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partDescription}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="0" y="67" width="130" height="28" uuid="f5cf811d-2dff-40d3-bfc9-f4972402df3a"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{locationName}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="154" y="67" width="116" height="28" uuid="1dd93a08-c7c5-4fb4-be24-066139113518"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{partNum}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="0" y="95" width="130" height="31" uuid="e4363679-49b2-4629-84cb-dda8eeb44fe1"/>
+				<textElement textAlignment="Center" rotation="None">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{locationName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="154" y="95" width="116" height="31" uuid="515cc34a-d8ee-478f-b6cc-6bf6152be258"/>
+				<textElement textAlignment="Center" rotation="None">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partNum}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

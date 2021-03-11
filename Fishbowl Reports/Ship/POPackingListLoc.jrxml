@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="POPackingListLoc" pageWidth="542" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="540" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="095fc618-6ee9-4e16-8044-235ab722f4c6">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.9965000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="9" fontName="Open Sans" fontSize="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="10" isDefault="true" fontName="Open Sans" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="12" fontName="Open Sans" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="14" fontName="Open Sans" fontSize="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="10b" fontName="Open Sans" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="12b" fontName="Open Sans" fontSize="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="14b" fontName="Open Sans" fontSize="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="16b" fontName="Open Sans" fontSize="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="18b" fontName="Open Sans" fontSize="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="24b" fontName="Open Sans" fontSize="24" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="10i" fontName="Open Sans" fontSize="10" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="12i" fontName="Open Sans" fontSize="12" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="10bu" fontName="Open Sans" fontSize="10" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="header1" fontName="Open Sans" fontSize="24" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="header2" fontName="Open Sans" fontSize="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="header3" fontName="Open Sans" fontSize="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="addressHeader" fontName="Open Sans" fontSize="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="date" fontName="Open Sans" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="type" fontName="Open Sans" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="address" fontName="Open Sans" fontSize="10" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="column_head" fontName="Open Sans" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="body" isDefault="true" fontName="Open Sans" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="note" isDefault="true" fontName="Open Sans" fontSize="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<parameter name="shipID" class="java.lang.String">
+		<defaultValueExpression><![CDATA["6"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="path" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["../Ship/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="module" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ISSUBREPORTONLY" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ckShowCountry" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[1,0]]></parameterDescription>
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowUniqueShipNumbers" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowBarcode" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowTracking" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCompanyName" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowOrderNotes" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    PO.ID AS POID,
+    PO.LOCATIONGROUPID AS LOCATIONGROUPID,
+    SHIP.ID AS SHIPID,
+    SHIP.STATUSID AS SHIPSTATUS,
+    SHIP.NOTE AS MEMO,
+    PO.VENDORSO AS SALESORDERNUMBER,
+    SHIP.DATESHIPPED AS SHIPDATE,
+    SHIP.SHIPTONAME AS SHIPTONAME,
+    SHIP.SHIPTOADDRESS AS SHIPTOADDRESS,
+    SHIP.SHIPTOCITY AS SHIPTOCITY,
+    SHIPSTATE.CODE AS SHIPTOSTATE,
+    SHIP.SHIPTOZIP AS SHIPTOZIP,
+    PO.REMITTONAME AS BILLTONAME,
+    PO.REMITADDRESS AS BILLTOADDRESS,
+    PO.REMITCITY AS BILLTOCITY,
+    BILLSTATE.CODE AS BILLTOSTATE,
+    PO.REMITZIP AS BILLTOZIP,
+    COALESCE(SHIP.CARTONCOUNT, 0) AS CARTONCOUNT,
+    PO.DATEFIRSTSHIP AS REGSHIPDATE,
+    FOBPOINT.NAME AS FOBPOINT,
+    SHIPTERMS.NAME AS SHIPPINGTERMS,
+    CARRIER.NAME AS CARRIERNAME,
+    PO.NUM AS PONUM,
+    SHIPCOUNTRY.NAME AS SHIPCOUNTRY,
+    BILLCOUNTRY.NAME AS BILLCOUNTRY,
+    SHIP.NUM AS SHIPNUM,
+    COMPANY.NAME AS COMPANY,
+    (SELECT S1.SYSVALUE FROM SYSPROPERTIES S1 WHERE S1.SYSKEY = 'Barcodes have DI') AS BARCODESHAVEDI
+
+FROM
+    ship
+    INNER JOIN carrier ON ship.carrierid = carrier.id
+    INNER JOIN po ON ship.poid = po.id
+    INNER JOIN fobpoint ON po.fobpointid = fobpoint.id
+    INNER JOIN shipterms ON po.shiptermsid = shipterms.id
+    LEFT OUTER JOIN stateconst shipState ON ship.shiptostateid = shipState.id
+    LEFT OUTER JOIN stateconst billState ON po.remitstateid = billState.id
+    LEFT OUTER JOIN countryconst shipCountry ON ship.shiptocountryid = shipCountry.id
+    LEFT OUTER JOIN countryconst billCountry ON po.remitcountryid = billCountry.id
+    INNER JOIN company ON company.id = 1
+
+WHERE
+    ship.ordertypeid = 10
+    AND ship.id = $P{shipID}]]>
+	</queryString>
+	<field name="POID" class="java.lang.Integer"/>
+	<field name="LOCATIONGROUPID" class="java.lang.Integer"/>
+	<field name="SHIPID" class="java.lang.Integer"/>
+	<field name="SHIPSTATUS" class="java.lang.Integer"/>
+	<field name="MEMO" class="java.lang.String"/>
+	<field name="SALESORDERNUMBER" class="java.lang.String"/>
+	<field name="SHIPDATE" class="java.sql.Timestamp"/>
+	<field name="SHIPTONAME" class="java.lang.String"/>
+	<field name="SHIPTOADDRESS" class="java.lang.String"/>
+	<field name="SHIPTOCITY" class="java.lang.String"/>
+	<field name="SHIPTOSTATE" class="java.lang.String"/>
+	<field name="SHIPTOZIP" class="java.lang.String"/>
+	<field name="BILLTONAME" class="java.lang.String"/>
+	<field name="BILLTOADDRESS" class="java.lang.String"/>
+	<field name="BILLTOCITY" class="java.lang.String"/>
+	<field name="BILLTOSTATE" class="java.lang.String"/>
+	<field name="BILLTOZIP" class="java.lang.String"/>
+	<field name="CARTONCOUNT" class="java.lang.Integer"/>
+	<field name="REGSHIPDATE" class="java.sql.Timestamp"/>
+	<field name="FOBPOINT" class="java.lang.String"/>
+	<field name="SHIPPINGTERMS" class="java.lang.String"/>
+	<field name="CARRIERNAME" class="java.lang.String"/>
+	<field name="PONUM" class="java.lang.String"/>
+	<field name="SHIPCOUNTRY" class="java.lang.String"/>
+	<field name="BILLCOUNTRY" class="java.lang.String"/>
+	<field name="SHIPNUM" class="java.lang.String"/>
+	<field name="COMPANY" class="java.lang.String"/>
+	<field name="BARCODESHAVEDI" class="java.lang.String"/>
+	<variable name="ORDERNUMBER" class="java.lang.String">
+		<variableExpression><![CDATA[$F{BARCODESHAVEDI} == null ? $V{PREORDERNUMBER} :
+	$F{BARCODESHAVEDI}.equals("true") && !$P{ShowUniqueShipNumbers} ? "P" + $V{PREORDERNUMBER} : $V{PREORDERNUMBER}]]></variableExpression>
+	</variable>
+	<variable name="PREORDERNUMBER" class="java.lang.String" resetType="None">
+		<variableExpression><![CDATA[$P{ShowUniqueShipNumbers} ?
+    $F{SHIPNUM} :
+    (($F{SALESORDERNUMBER} == null || $F{SALESORDERNUMBER}.length() < 1) ?
+        $F{PONUM} :
+        $F{SALESORDERNUMBER})]]></variableExpression>
+	</variable>
+	<variable name="DateFormat" class="java.lang.String" resetType="None">
+		<variableExpression><![CDATA[(System.getProperty("REPORT_DATE_FORMAT"))]]></variableExpression>
+	</variable>
+	<group name="CompanyAddressAndBarCode">
+		<groupExpression><![CDATA[null]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-16" mode="Transparent" x="0" y="0" width="274" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="cdbc034a-240e-4056-b5a8-2eaf4e0f4aec">
+						<printWhenExpression><![CDATA[new Boolean($P{module} != null)]]></printWhenExpression>
+					</reportElement>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[((com.evnt.eve.modules.ReportHelperModule) $P{module}).getCompanyReportAddress($F{LOCATIONGROUPID})]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="373" y="0" width="169" height="50" uuid="95972703-c080-433c-a6ea-70c4cacd730c">
+						<printWhenExpression><![CDATA[$P{ShowBarcode}]]></printWhenExpression>
+					</reportElement>
+					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="false" checksumRequired="false" barWidth="0" evaluationTime="Report">
+						<jr:codeExpression><![CDATA[$V{ORDERNUMBER}]]></jr:codeExpression>
+					</jr:barbecue>
+				</componentElement>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="CustomerAddresses">
+		<groupExpression><![CDATA[new Integer(1)]]></groupExpression>
+		<groupHeader>
+			<band height="80">
+				<staticText>
+					<reportElement key="staticText-1" style="14b" mode="Transparent" x="0" y="7" width="263" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="1a2e4232-9291-4790-911d-ddbf26dd8496"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+						<font fontName="Open Sans" size="12"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Ship To:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-2" style="14b" mode="Transparent" x="279" y="7" width="263" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="e2decc7d-6cff-4d5b-bd4b-a101dea25d84"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+						<font fontName="Open Sans" size="12"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Bill To:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-5" mode="Transparent" x="0" y="31" width="263" height="49" forecolor="#000000" backcolor="#FFFFFF" uuid="cd4b58fc-5c26-4a7f-9b5f-66b1e03f31ad">
+						<printWhenExpression><![CDATA[new Boolean($F{SHIPTONAME} != null)]]></printWhenExpression>
+					</reportElement>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+						<font fontName="Open Sans" isItalic="true"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{BILLTONAME} == null ? "" : $F{BILLTONAME}) + "\n" +
+($F{BILLTOADDRESS} == null ? "" : $F{BILLTOADDRESS}) + "\n" +
+($F{BILLTOCITY} == null ? "" : $F{BILLTOCITY}) + ", " + ($F{BILLTOSTATE} == null ? "  " : $F{BILLTOSTATE}) + "  " + ($F{BILLTOZIP} == null ? "" : $F{BILLTOZIP}) +
+($P{ckShowCountry}.equals("1") ? ($F{BILLCOUNTRY} == null ? "" : "\n" + $F{BILLCOUNTRY}) : "")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-6" mode="Transparent" x="279" y="31" width="263" height="49" forecolor="#000000" backcolor="#FFFFFF" uuid="b1ca7bb7-4516-488e-b49d-45f4cca359e8">
+						<printWhenExpression><![CDATA[new Boolean($F{BILLTONAME} != null)]]></printWhenExpression>
+					</reportElement>
+					<box topPadding="3" leftPadding="3" bottomPadding="3" rightPadding="3">
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+						<font fontName="Open Sans" isItalic="true"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{BILLTONAME} == null ? "" : $F{BILLTONAME}) + "\n" +
+($F{BILLTOADDRESS} == null ? "" : $F{BILLTOADDRESS}) + "\n" +
+($F{BILLTOCITY} == null ? "" : $F{BILLTOCITY}) + ", " + ($F{BILLTOSTATE} == null ? "  " : $F{BILLTOSTATE}) + "  " + ($F{BILLTOZIP} == null ? "" : $F{BILLTOZIP}) +
+($P{ckShowCountry}.equals("1") ? ($F{BILLCOUNTRY} == null ? "" : "\n" + $F{BILLCOUNTRY}) : "")]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Notes">
+		<groupExpression><![CDATA[new Integer(1)]]></groupExpression>
+		<groupHeader>
+			<band height="39">
+				<printWhenExpression><![CDATA[new Boolean(($F{MEMO} != null) && ($F{MEMO}.length() > 0)) && $P{ShowOrderNotes}]]></printWhenExpression>
+				<staticText>
+					<reportElement key="staticText-9" style="12b" mode="Transparent" x="0" y="7" width="133" height="18" forecolor="#000000" backcolor="#FFFFFF" uuid="d0fbd9e4-7e93-4d1d-bb26-aed10d2df3d3"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Notes]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-15" mode="Transparent" x="0" y="25" width="542" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="684246fc-4f42-4fb2-a634-27ff5578b428"/>
+					<box leftPadding="7">
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{MEMO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="PackingInfo">
+		<groupExpression><![CDATA[new Integer(1)]]></groupExpression>
+		<groupHeader>
+			<band height="35">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement key="staticText-3" style="10b" mode="Transparent" x="0" y="7" width="91" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="c7cfb89e-5515-4665-92a3-68f6fc42e38b"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[System.getProperty("DefaultContainer", "Carton") + " Count"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-4" style="10b" mode="Transparent" x="91" y="7" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="077aa31b-fec8-4d4e-b818-fad1f0fb5a59"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Req. Ship Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-5" style="10b" mode="Transparent" x="181" y="7" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="f4874167-d780-48c1-bbbf-117044391114"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[FOB Point]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-6" style="10b" mode="Transparent" x="271" y="7" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="8cd2c21f-3349-4826-8784-056c29f952ba"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Shipping Terms]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-7" style="10b" mode="Transparent" x="361" y="7" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="b770878c-b660-4df2-b0c2-25f534a0366d"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Ship Via]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-8" style="10b" mode="Transparent" x="451" y="7" width="91" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="bbd5741c-706d-49fa-bda3-0d5370ca4f52"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<text><![CDATA[Order Num]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-9" mode="Transparent" x="0" y="21" width="91" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="2a7f1f1c-ec71-4f4a-9f54-87952fab4ba7"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CARTONCOUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-10" mode="Transparent" x="91" y="21" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="76ceb5f1-119c-42cf-86ec-0871c5ff8c9e"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{REGSHIPDATE}]]></textFieldExpression>
+					<patternExpression><![CDATA[$V{DateFormat}]]></patternExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-11" mode="Transparent" x="181" y="21" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="a2cfdfd8-e6a0-4da2-b9e2-1f02431b3a1e"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{FOBPOINT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-12" mode="Transparent" x="271" y="21" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="f52ac156-f98e-4376-bb6d-180908b31089"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{SHIPPINGTERMS}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-13" mode="Transparent" x="361" y="21" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="0ff5756f-a020-4199-9470-ade8f0521b1b"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CARRIERNAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-14" mode="Transparent" x="451" y="21" width="91" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="d397497f-a859-4dfe-afdd-0f5427fbe05c"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+						<font fontName="Open Sans"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PONUM}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="cartonInfo">
+		<groupExpression><![CDATA[new Integer(1)]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<subreport isUsingCache="true">
+					<reportElement key="subreport-6" mode="Opaque" x="0" y="7" width="542" height="7" forecolor="#000000" backcolor="#FFFFFF" uuid="a8caa8af-c270-4766-a34e-ef08367898da"/>
+					<subreportParameter name="ShipID">
+						<subreportParameterExpression><![CDATA[$F{SHIPID}.toString()]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{path} + "subCarton.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<pageHeader>
+		<band height="60">
+			<staticText>
+				<reportElement key="staticText" style="24b" mode="Transparent" x="0" y="0" width="542" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="01aa27c5-c232-40e7-8e86-aca303607b48"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font fontName="Open Sans" size="20"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Packing List]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField" mode="Transparent" x="0" y="0" width="542" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="32d79d85-a1f5-4a17-83eb-6c58f82bec50"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None">
+					<font fontName="Open Sans"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(DateFormat.getDateInstance(DateFormat.SHORT)).format($F{SHIPDATE})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Report" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-3" style="18b" positionType="FixRelativeToBottom" mode="Transparent" x="373" y="40" width="169" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e877752b-92f0-4b3c-ae00-92a161717199"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font fontName="Open Sans" size="12"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ORDERNUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField-17" x="0" y="40" width="373" height="20" uuid="5875f7c7-2643-49b0-9720-aeb3b0693398">
+					<printWhenExpression><![CDATA[$P{ShowCompanyName}]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Open Sans" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COMPANY}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Left" vAlign="Bottom" isUsingCache="true">
+				<reportElement key="image-1" mode="Transparent" x="0" y="0" width="169" height="40" forecolor="#000000" backcolor="#FFFFFF" uuid="93eb9e38-e07c-4362-97be-21455cb276dd">
+					<printWhenExpression><![CDATA[new Boolean($P{module} != null)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+				<imageExpression><![CDATA[com.evnt.util.ImageUtil.decodeImage(((com.evnt.eve.modules.ReportHelperModule) $P{module}).getImageData("Company", 1, true))]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="35">
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-5" mode="Opaque" x="0" y="7" width="542" height="28" forecolor="#000000" backcolor="#FFFFFF" uuid="d3677da7-624d-4412-9d41-f640b44887c4"/>
+				<subreportParameter name="ShipStatus">
+					<subreportParameterExpression><![CDATA[$F{SHIPSTATUS}.toString()]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="module">
+					<subreportParameterExpression><![CDATA[$P{module}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ShowTracking">
+					<subreportParameterExpression><![CDATA[$P{ShowTracking}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ShipID">
+					<subreportParameterExpression><![CDATA[$F{SHIPID}.toString()]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="POID">
+					<subreportParameterExpression><![CDATA[$F{POID}.toString()]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{path} + "subPOItems.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bottomMargin="0" columnWidth="450" leftMargin="0" name="UPSLabel" orientation="Landscape" pageHeight="288" pageWidth="450" rightMargin="0" topMargin="0" uuid="46b05b97-b58a-400f-81eb-3daaca958fac" whenNoDataType="AllSectionsNoDetail" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter class="java.lang.Object" isForPrompting="false" name="module">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter class="java.lang.String" name="shipID"/>
+	<queryString>
+		<![CDATA[select shipcarton.id
+from ship
+join shipcarton on shipcarton.shipid = ship.id
+where ship.id = $P{shipID}]]>
+	</queryString>
+	<field class="java.lang.Integer" name="ID"/>
+	<detail>
+		<band height="288" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement height="288" positionType="Float" uuid="21946253-9fc1-4939-bd60-e0ee4da1a666" width="504" x="0" y="0"/>
+				<imageExpression><![CDATA[com.evnt.util.ImageUtil.decodeImage(((com.evnt.eve.modules.ReportHelperModule) $P{module}).getImageData("ShipCarton", $F{ID} , false, ".gif"))]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

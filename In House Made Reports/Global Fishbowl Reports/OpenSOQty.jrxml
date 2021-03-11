@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OpenSOQty" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eb4a7dad-3c98-45c0-81ef-a9cc93327315">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT customer.name,
+	so.num AS sonum,
+	so.customerPO,
+    DATE(soitem.dateScheduledFulfillment) AS dateScheduledFulfillment,
+	soitem.qtytofulfill - soitem.qtyFulfilled AS qtytofulfill,
+    product.num AS productnum,
+    product.description
+
+
+FROM soitem
+    INNER JOIN so ON so.id = soitem.soid
+    INNER JOIN product ON product.id = soitem.productid
+    INNER JOIN customer ON customer.id = so.customerid
+
+WHERE soitem.typeid = 10
+  AND soitem.statusid < 50
+  AND so.statusid IN (20,25)
+AND so.num LIKE 'HH%'
+
+ORDER BY customer.name, DATE(soitem.dateScheduledFulfillment)]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sonum" class="java.lang.String"/>
+	<field name="customerPO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dateScheduledFulfillment" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qtytofulfill" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="productnum" class="java.lang.String"/>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="SONum">
+		<groupExpression><![CDATA[$F{sonum}]]></groupExpression>
+		<groupHeader>
+			<band height="18">
+				<textField>
+					<reportElement x="0" y="0" width="54" height="16" uuid="3ce60912-7f48-451f-9277-e4041f1ab666"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{sonum}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="54" y="0" width="101" height="16" uuid="170eb05f-5d6c-446c-9307-513306aed996"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{customerPO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="155" y="0" width="83" height="16" uuid="83d75b34-d8e3-48e9-a27e-46d90705aabc"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="16" width="572" height="1" uuid="4965bcfb-386b-4062-b040-1f47d5a1c932"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="5"/>
+		</groupFooter>
+	</group>
+	<pageHeader>
+		<band height="21" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="17" width="572" height="1" uuid="f4625a75-66a2-448a-9f41-b8ce893f852e"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="54" height="17" uuid="e88e23c1-76b3-40c2-a3b5-97e50d13641d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Product #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="54" y="0" width="83" height="17" uuid="66c19035-f7ac-42f7-bd2f-be817f55fc06"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date Sheduled]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="137" y="0" width="83" height="17" uuid="3dae2a6b-504e-49d0-877c-f55107f30bb2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty Left To Ship]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="155" y="0" width="83" height="16" uuid="c6c6f2e6-3965-4839-892e-c25017a638c0"/>
+				<textFieldExpression><![CDATA[$F{qtytofulfill}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="54" height="16" uuid="17330b8f-d599-40db-8d78-de02913006c7"/>
+				<textFieldExpression><![CDATA[$F{productnum}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="54" y="0" width="101" height="16" uuid="49d43358-8e59-4c45-8dbe-1f5784f2810c"/>
+				<textFieldExpression><![CDATA[$F{dateScheduledFulfillment}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

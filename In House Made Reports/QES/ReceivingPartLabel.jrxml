@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReceivingPartLabel" pageWidth="288" pageHeight="108" whenNoDataType="AllSectionsNoDetail" columnWidth="268" leftMargin="14" rightMargin="6" topMargin="6" bottomMargin="6" uuid="0e3d0d53-4132-4a5c-a5a5-18fe2a23b1bc">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="receiptID" class="java.lang.String">
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="currentUser" class="java.lang.Integer"/>
+	<parameter name="REPORTDESCRIPTION" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Get inventory label for received PO items by PO."]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowBarcodeS/N:" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT receipt.id AS ReceiptID, poItem.id AS poItemId, FORMAT(receiptitem.qty, 2) AS ReceiptItemQty,
+    uom.code AS ReceiptItemUOM,
+    (CASE
+	WHEN defaultLoc.name IS NULL THEN 'Not SetUp'
+	WHEN defaultLoc.name = '' THEN 'Not SetUp'
+	ELSE defaultLoc.name
+    END) AS defaultLocation,
+po.num AS poNum, DATE_FORMAT(curdate(), '%m/%d/%Y') AS recDate,
+    (CASE
+        WHEN part.num IS NULL THEN poitem.partnum
+        ELSE part.num
+    END) AS ReceiptItemPartNum,
+    (CASE
+	WHEN receipt.ordertypeid = 10 THEN po.num
+	WHEN receipt.ordertypeid = 20 THEN so.num
+	WHEN receipt.ordertypeid = 40 THEN xo.num
+    END) AS OrderNumber,
+    (CASE
+	WHEN receipt.ordertypeid = 10 THEN vendor.name
+	WHEN receipt.ordertypeid = 20 THEN customer.name
+	WHEN receipt.ordertypeid = 40 THEN xolg.name
+    END) AS OrderName,
+sysuser.userName AS user,
+part.description
+
+
+FROM receipt
+    INNER JOIN receipttype ON (receipt.typeid = receipttype.id)
+    INNER JOIN receiptstatus ON (receipt.statusid = receiptstatus.id)
+    INNER JOIN locationgroup receiptlg ON (receipt.locationgroupid = receiptlg.id)
+    LEFT OUTER JOIN ordertype ON (receipt.ordertypeid = ordertype.id)
+    LEFT OUTER JOIN receiptitem ON ((receipt.id = receiptitem.receiptid))
+    LEFT OUTER JOIN tag maintag ON (receiptitem.tagid = maintag.id)
+    LEFT OUTER JOIN location mainlocation ON (maintag.locationid = mainlocation.id)
+    LEFT OUTER JOIN locationgroup mainlg ON (mainlocation.locationgroupid = mainlg.id)
+    LEFT OUTER JOIN receiptitemstatus ON (receiptitem.statusid = receiptitemstatus.id)
+    LEFT OUTER JOIN part ON (receiptitem.partid = part.id)
+    LEFT OUTER JOIN defaultlocation ON (part.id = defaultlocation.partid AND receipt.locationgroupid = defaultlocation.locationgroupid)
+    LEFT OUTER JOIN location defaultLoc ON (defaultlocation.locationid = defaultLoc.id)
+    LEFT OUTER JOIN uom ON (receiptitem.uomid = uom.id)
+    LEFT OUTER JOIN po ON ((receipt.poid = po.id) AND (receipt.ordertypeid = 10))
+    LEFT OUTER JOIN so ON ((receipt.soid = so.id) AND (receipt.ordertypeid = 20))
+    LEFT OUTER JOIN xo ON ((receipt.xoid = xo.id) AND (receipt.ordertypeid = 40))
+    LEFT OUTER JOIN vendor ON ((receipt.poid = po.id) AND (receipt.ordertypeid = 10) AND (vendor.id = po.vendorid))
+    LEFT OUTER JOIN customer ON ((receipt.soid = so.id) AND (receipt.ordertypeid = 20) AND (customer.id = so.customerid))
+    LEFT OUTER JOIN LocationGroup xolg ON ((receipt.xoid = xo.id) AND (receipt.ordertypeid = 40) AND (xolg.id = xo.fromlgid))
+    LEFT OUTER JOIN poitem ON ((receiptitem.poitemid = poitem.id) AND (receipt.ordertypeid = 10))
+    LEFT OUTER JOIN soitem ON ((receiptitem.soitemid = soitem.id) AND (receipt.ordertypeid = 20))
+    LEFT OUTER JOIN xoitem ON ((receiptitem.xoitemid = xoitem.id) AND (receipt.ordertypeid = 40))
+JOIN company ON company.id = 1
+JOIN sysuser ON sysuser.id = $P{currentUser}
+
+WHERE receipt.id = $P!{receiptID}
+  AND receiptitem.typeid in (1,10)
+AND receiptitem.statusId IN(30,40)]]>
+	</queryString>
+	<field name="ReceiptID" class="java.lang.Integer"/>
+	<field name="poItemId" class="java.lang.Integer"/>
+	<field name="ReceiptItemQty" class="java.lang.String"/>
+	<field name="ReceiptItemUOM" class="java.lang.String"/>
+	<field name="defaultLocation" class="java.lang.String"/>
+	<field name="poNum" class="java.lang.String"/>
+	<field name="recDate" class="java.lang.String"/>
+	<field name="ReceiptItemPartNum" class="java.lang.String"/>
+	<field name="OrderNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="OrderName" class="java.lang.String"/>
+	<field name="user" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="96" splitType="Stretch">
+			<printWhenExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()!=0)]]></printWhenExpression>
+			<textField>
+				<reportElement x="0" y="0" width="268" height="16" uuid="68fcaedf-053d-43cf-99b5-33ead24f1d59"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["P/N: " + $F{ReceiptItemPartNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="34" width="268" height="16" uuid="dad98881-d6b3-4d4f-9a07-6c26379f4122"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Qty: " + $F{ReceiptItemQty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="50" width="268" height="16" uuid="b0197d5a-c410-4fbb-86d5-852004d22ed5"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PO #: " + $F{poNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="66" width="268" height="16" uuid="e1cbfb04-f29c-405a-b8fa-b9154650c2c4"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Location: " + $F{defaultLocation}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="82" width="268" height="14" uuid="0d28aa02-e41b-41fb-af17-cfc0885bfa22"/>
+				<textElement textAlignment="Center" rotation="None">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Recieve Date: " + $F{recDate} + " By: " + $F{user}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="136" y="0" width="132" height="16" uuid="a1063e9b-38cf-4446-bd5a-1fea4ddc1bcf"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{ReceiptItemPartNum}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="0" y="16" width="268" height="16" uuid="de52701d-ff12-4977-9979-041c463025f6"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="96">
+			<printWhenExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()==0)]]></printWhenExpression>
+			<textField>
+				<reportElement x="0" y="38" width="268" height="21" uuid="713f8b48-993b-47c9-af57-912d96926fdc"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Item Must Be Recieved First"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

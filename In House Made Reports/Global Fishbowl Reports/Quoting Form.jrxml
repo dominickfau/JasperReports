@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Quoting Form" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5e031e37-16e4-4a0f-a4f5-9309e8df2c06">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#73E6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFE6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F5F5F5">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#FFEFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F5F5F5">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#FFEFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="module" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORTDESCRIPTION" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Report for quoting new products. If the parts are duplicated, populate the 'Address Name' field with the address you want the report to show."]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCountry" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ReportTitle" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="currentUser" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="salesPerson" class="java.lang.String"/>
+	<parameter name="customerID" class="java.lang.String"/>
+	<parameter name="LeadTimeDays" class="java.lang.String"/>
+	<parameter name="productNumProductNumber_1" class="java.lang.String"/>
+	<parameter name="productNumProductNumber_2" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_3" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_4" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_5" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_6" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_7" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_8" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_9" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_10" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_11" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_12" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_13" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_14" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="productNumProductNumber_15" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="cbAddressType" class="java.lang.String">
+		<parameterDescription><![CDATA[50,Main Office,10,Ship To,20,Bill To,30,Remit To,40,Home]]></parameterDescription>
+		<defaultValueExpression><![CDATA["50"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AddressName" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT product.num AS partNum, product.description AS partDescription, customerparts.customerPartNumber AS customerPartNumber,
+	customerparts.lastPrice AS customerLastPrice, customer.name AS customerName, customer.number AS customerNumber,
+    address.addressName AS addressName, address.address AS address, address.city AS city, stateconst.name AS stateName,
+    address.zip AS zipCode, countryconst.name AS countryName, shipterms.name AS shipTermsName,
+    paymentterms.netDays AS paymentTermsNetDays, company.name AS companyName, sysuser.firstName AS fullFirstName, LEFT(sysuser.firstName, 1) AS firstNameLetter, sysuser.lastName AS fullLastName, sysuser.email AS email
+
+FROM part
+JOIN product ON part.id = product.partId
+JOIN customerparts ON product.id = customerparts.productId
+JOIN customer on customerparts.customerId = customer.id
+JOIN shipterms ON customer.defaultShipTermsId = shipterms.id
+JOIN paymentterms ON customer.defaultPaymentTermsId = paymentterms.id
+INNER JOIN address ON customer.accountId = address.accountId
+JOIN countryconst ON address.countryId = countryconst.id
+JOIN stateconst ON address.stateId = stateconst.id
+JOIN company ON (1=1)
+JOIN sysuser ON sysuser.id = $P{currentUser}
+
+WHERE customer.id = $P{customerID}
+AND address.typeId = $P{cbAddressType}
+AND address.addressName LIKE $P{AddressName}
+AND (product.num = $P{productNumProductNumber_1}
+	OR product.num = $P{productNumProductNumber_2}
+	OR product.num = $P{productNumProductNumber_3}
+	OR product.num = $P{productNumProductNumber_4}
+	OR product.num = $P{productNumProductNumber_5}
+	OR product.num = $P{productNumProductNumber_6}
+OR product.num = $P{productNumProductNumber_7}
+OR product.num = $P{productNumProductNumber_8}
+OR product.num = $P{productNumProductNumber_9}
+OR product.num = $P{productNumProductNumber_10}
+OR product.num = $P{productNumProductNumber_11}
+OR product.num = $P{productNumProductNumber_12}
+OR product.num = $P{productNumProductNumber_13}
+OR product.num = $P{productNumProductNumber_14}
+OR product.num = $P{productNumProductNumber_15})]]>
+	</queryString>
+	<field name="partNum" class="java.lang.String"/>
+	<field name="partDescription" class="java.lang.String"/>
+	<field name="customerPartNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="customerLastPrice" class="java.lang.Float"/>
+	<field name="customerName" class="java.lang.String"/>
+	<field name="customerNumber" class="java.lang.String"/>
+	<field name="addressName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="city" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="stateName" class="java.lang.String"/>
+	<field name="zipCode" class="java.lang.String"/>
+	<field name="countryName" class="java.lang.String"/>
+	<field name="shipTermsName" class="java.lang.String"/>
+	<field name="paymentTermsNetDays" class="java.lang.Integer"/>
+	<field name="companyName" class="java.lang.String"/>
+	<field name="fullFirstName" class="java.lang.String"/>
+	<field name="firstNameLetter" class="java.lang.String"/>
+	<field name="fullLastName" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<variable name="DateFormat" class="java.lang.String" resetType="None">
+		<variableExpression><![CDATA[(System.getProperty("REPORT_DATE_FORMAT"))]]></variableExpression>
+	</variable>
+	<title>
+		<band height="160" splitType="Stretch">
+			<image scaleImage="RetainShape" vAlign="Top" isUsingCache="true">
+				<reportElement key="Logo" mode="Opaque" x="0" y="0" width="168" height="55" forecolor="#000000" backcolor="#FFFFFF" uuid="5acebfe3-5da6-49aa-a5b4-350445bd37e3">
+					<printWhenExpression><![CDATA[new Boolean($P{module} != null)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+				<imageExpression><![CDATA[com.evnt.util.ImageUtil.decodeImage(((com.evnt.eve.modules.ReportHelperModule) $P{module}).getImageData("Company", 1, true))]]></imageExpression>
+			</image>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="0" y="75" width="283" height="70" forecolor="#000000" backcolor="#FFFFFF" uuid="2a18fecd-8098-42e4-9936-53955a0cc2de"/>
+				<box leftPadding="3" bottomPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[((com.evnt.eve.modules.ReportHelperModule) $P{module}).getCompanyReportAddress(new Integer(1), $P{ShowCountry})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Report" pattern="" isBlankWhenNull="true">
+				<reportElement key="US / Canada Title" mode="Transparent" x="378" y="0" width="194" height="24" forecolor="#000000" backcolor="#FFFFFF" uuid="936939ad-fecf-4352-87d5-e8cc13a0d29e">
+					<printWhenExpression><![CDATA[!(com.evnt.eve.modules.AccountingModule.isAu())]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None">
+					<font fontName="Open Sans" size="17" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ReportTitle}.equals("%") ? "Quotation" : $P{ReportTitle}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="CompanyName" mode="Transparent" x="0" y="55" width="283" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="9e4fe684-2ad7-4ffb-8a37-e8115f02cb29"/>
+				<box leftPadding="3" bottomPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Top" rotation="None">
+					<font fontName="Open Sans" size="14" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{companyName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="335" y="75" width="237" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="9aa25137-8430-4f85-a6df-1b8300a92c77"/>
+				<box leftPadding="3" bottomPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["To: " + $F{customerName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="335" y="89" width="237" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="0715f5c8-0d1f-4136-ad8e-9bafb6d61e73"/>
+				<box leftPadding="3" bottomPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["    " + $F{address}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="335" y="103" width="237" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="f906f4cd-e02c-4e8c-9a6a-6dadc2751d51"/>
+				<box leftPadding="3" bottomPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["    " + $F{city} + ", " + $F{stateName} + " " + $F{zipCode}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="335" y="117" width="237" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="3c9b6f02-cd5d-48af-9d43-e6f247a40ff4"/>
+				<box leftPadding="3" bottomPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["    " + $F{countryName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="335" y="55" width="237" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="2554002f-1dea-4db4-80a2-2af68aaf84a0"/>
+				<box leftPadding="3" bottomPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Customer ID: " + $F{customerNumber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="46">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="0" y="0" width="113" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="4774b34f-bc00-4063-95b7-716137e5a003"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Salesperson"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="227" y="0" width="114" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="30c6aea1-0850-423d-b466-2d107ea49472"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Lead Time"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="113" y="0" width="114" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="d537e756-1a37-4e9b-8c51-47e33651f476"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Shipping Terms"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="341" y="0" width="114" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="593af8b5-2098-419b-ae49-f363c1ba1f25"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Payment Terms"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="455" y="0" width="117" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="7099f1ca-abf9-47e5-ad43-2b3aab546c09"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Prepared By"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="341" y="14" width="114" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="462b973f-e910-4cfd-95af-5ce4c76371b7"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NET " + $F{paymentTermsNetDays}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="113" y="14" width="114" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="fc733854-39ba-494e-beef-e1f62c2cbc8e"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{shipTermsName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="227" y="14" width="114" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="63a6ff0a-b8d7-480a-a17b-373578e4c44f"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{LeadTimeDays} + " Days"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="455" y="14" width="117" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="02008250-1abf-4d56-bb38-db6d7905b3ae"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{firstNameLetter} + ". " + $F{fullLastName}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="0" y="14" width="113" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="f242c945-d090-4440-839e-41664d603375"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{salesPerson}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="14">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="180" y="0" width="327" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="d84773d1-176c-4513-b053-e6e2dd013982"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Description"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="35" y="0" width="75" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="62a7fe0e-1b1b-4e38-9573-cdd32e5d6e67"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Part Number"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="110" y="0" width="70" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="14e7d96d-0cbd-4ec9-95a6-61dda55b18bb"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cust PN"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="507" y="0" width="65" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="cded7f55-4f59-4bae-86d9-90e2e3bd1e75"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Unit Price"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Opaque" x="0" y="0" width="35" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="f05283e5-3410-4f9d-80e8-1c39421e791c"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Qty"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="110" y="0" width="70" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="d5d2696c-bd46-4011-8895-3404313731d6"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customerPartNumber}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="507" y="0" width="65" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="65fb3bb7-ebca-4a76-81b3-3d6fd320d665"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customerLastPrice}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="0" y="0" width="35" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="b1496fe6-80d4-4f15-a48a-920be17d16b4"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["1 ea"]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="180" y="0" width="327" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="4af396c2-5002-4247-94c4-945245ae43d1"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partDescription}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="35" y="0" width="75" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="d5d3b864-de91-4e5e-a825-c43662e8c8cc"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partNum}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="14">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-29" mode="Transparent" x="0" y="0" width="404" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="99597604-7ac8-4c5d-ad20-0cec686f54f7"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="Open Sans" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG)).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-31" mode="Transparent" x="534" y="0" width="38" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="1009b624-ac0b-4d2c-b480-189d140d80bb"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="Open Sans" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="CP1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-30" mode="Transparent" x="404" y="0" width="130" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="afeb542e-e744-49e1-b0fa-8b3a24153010"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+					<font fontName="Open Sans" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="CP1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="76">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="0" y="0" width="572" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="999ba2f0-6465-4c5c-94fa-fa8239e83970"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="styled">
+					<font fontName="Open Sans" size="12" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Thank You For Your Business!"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-31" mode="Transparent" x="534" y="62" width="38" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="07be2425-345d-47be-8808-8923d44f6703"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="Open Sans" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="CP1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-30" mode="Transparent" x="404" y="62" width="130" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="a4c7217a-5a7b-4906-ab35-0a5f10c1d301"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
+					<font fontName="Open Sans" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="CP1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-29" mode="Transparent" x="0" y="62" width="404" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="3f08f01e-f7c3-4bc3-89dc-a34d4945091a"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="Open Sans" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG)).format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<noData>
+		<band height="72">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="0" y="0" width="572" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="4aab7e13-adfa-49f6-bec6-54477780d5d1"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="styled">
+					<font fontName="Open Sans" size="12" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["No Data Returned."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-23" positionType="Float" mode="Transparent" x="0" y="20" width="572" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="e6425343-d24a-4b69-9e2d-42089bb7f959"/>
+				<box leftPadding="3" bottomPadding="0">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="styled">
+					<font fontName="Open Sans" size="12" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Does the part have a customer part assigned?"]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

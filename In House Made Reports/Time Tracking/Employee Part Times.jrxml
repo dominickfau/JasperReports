@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Employee Part Times.jrxml" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="5e031e37-16e4-4a0f-a4f5-9309e8df2c06">
+	<property name="ireport.zoom" value="1.6500000000000004"/>
+	<property name="ireport.x" value="49"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#73E6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#CFE6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="alternateStyle" mode="Transparent" forecolor="#000000" backcolor="#FFFFFF" fontName="Arial">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{efficiency} < new Double(85))]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FFCC00" fill="Solid" isBlankWhenNull="false" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="Start_Date" class="java.util.Date">
+		<parameterDescription><![CDATA[Enter the date to use as start date.]]></parameterDescription>
+	</parameter>
+	<parameter name="End_Date" class="java.util.Date">
+		<parameterDescription><![CDATA[Enter the date to use as end date.]]></parameterDescription>
+	</parameter>
+	<parameter name="First_Name" class="java.lang.String">
+		<parameterDescription><![CDATA[Enter employee First Name to filter. Use % to show all employees.]]></parameterDescription>
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Show_Build" class="java.lang.Boolean"/>
+	<parameter name="Show_Termination" class="java.lang.Boolean"/>
+	<parameter name="Show_Prep" class="java.lang.Boolean"/>
+	<parameter name="Show_Wire_Cutting" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT b.timesId AS timesId,
+	b.firstName AS firstName,
+    b.employeeId AS employeeId,
+    b.processStep AS processStep,
+	b.partNum AS partNum,
+    b.batchQty AS batchQty,
+    DATE(b.dateFinished) AS dateFinished,
+    b.totalBreakTime AS totalBreakTime,
+    b.afterHours AS afterHours,
+    b.timeStartToFinish AS timeStartToFinish,
+    b.timePerPart AS timePerPart,
+    b.timeAllotted AS timeAllotted,
+    ROUND(b.efficiency,4) AS efficiency,
+    b.notes as notes,
+    CASE WHEN p.pauseAmount IS NULL THEN '0' ELSE p.pauseAmount END AS pauseAmount
+
+FROM buildeff b
+LEFT JOIN timesamountpaused p ON b.timesId = p.timesId
+
+WHERE DATE(dateFinished) BETWEEN $P{Start_Date} AND $P{End_Date}
+AND b.firstName LIKE $P{First_Name}
+AND (CASE WHEN $P{Show_Build} IS True THEN b.processStep IN('Build') ELSE '' END
+	OR CASE WHEN $P{Show_Prep} IS True THEN b.processStep IN('Prep') ELSE '' END
+	OR CASE WHEN $P{Show_Termination} IS True THEN b.processStep IN('Termination') ELSE '' END
+	OR CASE WHEN $P{Show_Wire_Cutting} IS True THEN b.processStep IN('Wire Cutting') ELSE '' END)
+
+ORDER BY b.firstName, b.dateFinished]]>
+	</queryString>
+	<field name="timesId" class="java.lang.Integer"/>
+	<field name="firstName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="employeeId" class="java.lang.Integer"/>
+	<field name="processStep" class="java.lang.String"/>
+	<field name="partNum" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="batchQty" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dateFinished" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="totalBreakTime" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="afterHours" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="timeStartToFinish" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="timePerPart" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="timeAllotted" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="efficiency" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="notes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pauseAmount" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="TotalTimeUsed" class="java.lang.Float" resetType="Group" resetGroup="firstName" calculation="Sum">
+		<variableExpression><![CDATA[$F{timePerPart} * $F{batchQty}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalTimeAllotted" class="java.lang.Float" resetType="Group" resetGroup="firstName" calculation="Sum">
+		<variableExpression><![CDATA[$F{timeAllotted} * $F{batchQty}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalAvgEff" class="java.lang.Float" resetType="Group" resetGroup="firstName" calculation="Average">
+		<variableExpression><![CDATA[$F{efficiency}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TotalParts" class="java.lang.Integer" resetType="Group" resetGroup="firstName" calculation="Sum">
+		<variableExpression><![CDATA[$F{batchQty}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reprotTotalTimeUsed" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{timePerPart} * $F{batchQty}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalTimeAllotted" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{timeAllotted} * $F{batchQty}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalAvgEff" class="java.lang.Float" calculation="Average">
+		<variableExpression><![CDATA[$F{efficiency}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalParts" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{batchQty}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportUniqueNames" class="java.lang.Integer" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{firstName}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="below85Count" class="java.lang.Integer" resetType="Group" resetGroup="firstName" calculation="Count">
+		<variableExpression><![CDATA[new Boolean($F{efficiency} < new Double(85)) ? $V{below85Count} + 1 : $V{above85Count} + 1]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="above85Count" class="java.lang.Integer" resetType="Group" resetGroup="firstName">
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<group name="firstName" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{firstName}]]></groupExpression>
+		<groupHeader>
+			<band height="28">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="752" height="14" backcolor="#CCCCCC" uuid="31be6d31-0b9d-467f-a455-cdf8c10c6505"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Employee: " + $F{firstName}]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="662" y="14" width="90" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="5d011c25-9c73-47ac-b2d5-e6d6c1ba26d2"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Build Efficieny %"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="527" y="14" width="68" height="14" backcolor="#CCCCCC" uuid="1081cdb9-b87a-4111-ad50-59d81ec48cf6"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Time Allotted"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="595" y="14" width="67" height="14" backcolor="#CCCCCC" uuid="859cd635-a133-4b01-a4c1-a0e7dc86621b"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Time Per Part"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="246" y="14" width="50" height="14" backcolor="#CCCCCC" uuid="dd3111d0-7f27-4bac-ae3e-c652961e87c6"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Batch Qty"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="53" y="14" width="66" height="14" backcolor="#CCCCCC" uuid="cc629253-b212-412e-8c36-927f9e8274d2"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Process Step"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="372" y="14" width="67" height="14" backcolor="#CCCCCC" uuid="e19faad9-43e4-410a-8d33-55c1d77e824e"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Time Paused"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="179" y="14" width="67" height="14" backcolor="#CCCCCC" uuid="cfb82678-b6de-4f58-b4db-e52139592045"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Part Number"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="119" y="14" width="60" height="14" backcolor="#CCCCCC" uuid="afd20910-63dc-4f0e-add0-f5fca88ffae1"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Date"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="296" y="14" width="76" height="14" backcolor="#CCCCCC" uuid="0c121a26-d1bf-4722-a189-07b99903c9f0"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Pause Count"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="439" y="14" width="88" height="14" backcolor="#CCCCCC" uuid="bfa50070-86bc-4080-97c5-3340d5b366a8"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Time After Hours"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="0" y="14" width="53" height="14" backcolor="#CCCCCC" uuid="c6cfd92e-d436-428d-9eb3-9211759915ff"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["ID #"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="56">
+				<textField pattern="">
+					<reportElement mode="Opaque" x="602" y="0" width="75" height="14" backcolor="#CCCCCC" uuid="cf8d044f-1417-4254-8da7-34ddbb5cd97d"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Time"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="602" y="14" width="75" height="14" uuid="e57d4d9d-c03d-47b7-8de6-eb42d4976867"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TotalTimeUsed} + " min"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="527" y="0" width="75" height="14" backcolor="#CCCCCC" uuid="a9d8cdf7-5bbf-419a-9c7f-76478222cfce"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Allotted"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="527" y="14" width="75" height="14" uuid="55ecaa52-74de-4b93-9ffc-f0837417ad84"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TotalTimeAllotted} + " min"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="677" y="0" width="75" height="14" backcolor="#CCCCCC" uuid="b2050a6b-e88e-4bfe-be67-d71cc135369d"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Avg Eff"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="677" y="14" width="75" height="14" uuid="17fff03c-690a-4cc5-9041-f5bade9cb518"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TotalAvgEff} + " %"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="342" y="0" width="75" height="14" backcolor="#CCCCCC" uuid="5f8b23dc-51aa-4426-b3f8-18d5c7e77784"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total Parts"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="342" y="14" width="75" height="14" uuid="13b31ea7-ee3d-4e0a-bdde-b30347b3ba9c"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TotalParts} + " pcs"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="527" y="28" width="75" height="14" uuid="e6c69570-82c0-49a3-9373-9ae2588f0eac"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[Math.round($V{TotalTimeAllotted} / 60) + " hrs"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="602" y="28" width="75" height="14" uuid="6dbc6c34-a134-4e92-b889-ad8e5f941205"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[Math.round($V{TotalTimeUsed} / 60) + " hrs"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="417" y="14" width="110" height="14" uuid="dd9f26e3-9d26-4cf2-be08-8737d1849a17"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{below85Count} - 1) + " pcs"]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement mode="Opaque" x="417" y="0" width="110" height="14" backcolor="#CCCCCC" uuid="b16be93f-ebcf-422a-abeb-842ef45fdbca"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center">
+						<font fontName="SansSerif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Number Below 85%"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<pageHeader>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement style="alternateStyle" mode="Opaque" x="506" y="14" width="85" height="14" backcolor="#FFCC00" uuid="f0987ad7-8783-4142-8b75-5ab86440bc4b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["< 85% Efficient"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="251" y="14" width="74" height="14" uuid="5ce5336f-c498-4735-8117-7b322da869fb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date Range "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="392" y="14" width="20" height="14" uuid="4a4a764e-e7b0-403f-a7df-983263a470b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" To  "]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM-dd-yyyy">
+				<reportElement x="325" y="14" width="67" height="14" uuid="95c3c2df-f269-49f4-a201-9ae1c5ace92f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Start_Date}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM-dd-yyyy">
+				<reportElement x="412" y="14" width="71" height="14" uuid="5e46293d-0bd2-4029-b245-ee5f9d980aed"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{End_Date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="752" height="14" uuid="4b096410-7620-4582-9cd3-3672cb621d5b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[Employee Part Times]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField pattern="">
+				<reportElement style="alternateStyle" x="179" y="0" width="67" height="14" uuid="3d3f7509-cbe1-4a62-9b91-b0bbfddfaec2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partNum}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="alternateStyle" x="53" y="0" width="66" height="14" uuid="e76cd9db-b36d-407a-9ed4-744f2760a779"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{processStep}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="alternateStyle" x="246" y="0" width="50" height="14" uuid="fac51980-d011-4ff1-a3a3-c8fc829f2008"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{batchQty} + " pcs"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="table" mode="Transparent" x="662" y="0" width="90" height="14" forecolor="#000000" uuid="3fd80469-2d01-423d-a232-ec1417e260fe"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{efficiency} + " %"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="alternateStyle" x="372" y="0" width="67" height="14" uuid="20744782-729e-4d30-a852-b11552145d44"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalBreakTime} + " min"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="alternateStyle" x="595" y="0" width="67" height="14" uuid="017047ea-40c6-4300-80fd-0ea21e75c5fe"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{timePerPart} + " min"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="alternateStyle" x="527" y="0" width="68" height="14" uuid="12fd78ac-e4bb-475a-af13-96443222785e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{timeAllotted} + " min"]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM-dd-yyyy">
+				<reportElement style="alternateStyle" x="119" y="0" width="60" height="14" uuid="5b033f2a-8211-4fd5-bce0-214415a05639"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateFinished}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="alternateStyle" x="296" y="0" width="76" height="14" uuid="a02884c0-2217-4687-a621-89692d7c7326"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pauseAmount} + " ea"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement style="alternateStyle" x="439" y="0" width="88" height="14" uuid="8eef97d3-db7a-494f-bdf6-a58bc8c62389"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{afterHours} + " min"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="0" y="0" width="53" height="14" uuid="f4d3ef24-d054-41b2-ab8a-39b8482589c6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{timesId}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="28">
+			<printWhenExpression><![CDATA[$F{notes}!= null]]></printWhenExpression>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="752" height="14" backcolor="#CCCCCC" uuid="ca24af61-3c1e-4ff7-b1de-cbdf198ee151"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Notes for line above"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="0" y="14" width="752" height="14" uuid="fff5e774-ba06-4d47-b606-2aebaf92c35f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{notes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="14">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-29" mode="Transparent" x="0" y="0" width="632" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="d2b1975c-43e4-4a63-be41-bb5326d1da62"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG)).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="632" y="0" width="80" height="14" uuid="3fccb8a6-c2a8-47d8-b124-576d23ba421a"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="712" y="0" width="40" height="14" uuid="4e90a08a-41a6-4b4b-a8a5-6d71bc62f2f0"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

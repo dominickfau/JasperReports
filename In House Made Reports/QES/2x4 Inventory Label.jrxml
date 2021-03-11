@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="2x4 Inventory Label" pageWidth="288" pageHeight="144" whenNoDataType="AllSectionsNoDetail" columnWidth="270" leftMargin="9" rightMargin="9" topMargin="9" bottomMargin="9" uuid="90e41a1c-e301-4ced-ba5a-5a75faf0a025">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.853116706110004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="default" isDefault="true" fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="18" fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+	<style name="style1" hAlign="Center" vAlign="Middle"/>
+	<parameter name="REPORTDESCRIPTION" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Part Barcodes for 2x4 Avery 8163 Labels"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Part_Number" class="java.lang.String">
+		<parameterDescription><![CDATA[Enter part number use % to search all.]]></parameterDescription>
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Part_Description" class="java.lang.String">
+		<parameterDescription><![CDATA[Use to filter by description add % to search for a few words.]]></parameterDescription>
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Location_Name" class="java.lang.String">
+		<parameterDescription><![CDATA[Enter location name or use % for all.]]></parameterDescription>
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT part.num AS partNum, part.description AS partDescription, l.name AS partDefaultLocation,
+lg.name AS lgName
+FROM part
+JOIN defaultlocation dl ON part.id = dl.partId
+JOIN location l ON dl.locationId = l.id
+JOIN locationgroup lg ON dl.locationGroupId = lg.id
+WHERE part.activeFlag = 1
+AND l.name LIKE $P{Location_Name}
+AND part.num LIKE $P{Part_Number}
+AND part.description LIKE $P{Part_Description}
+ORDER BY part.num]]>
+	</queryString>
+	<field name="partNum" class="java.lang.String"/>
+	<field name="partDescription" class="java.lang.String"/>
+	<field name="partDefaultLocation" class="java.lang.String"/>
+	<field name="lgName" class="java.lang.String"/>
+	<detail>
+		<band height="126">
+			<textField>
+				<reportElement x="0" y="0" width="270" height="20" uuid="f2797207-6821-4b72-8365-4b9124ceb3b6"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="270" height="20" uuid="6cf39eff-7f32-496e-a934-559467b84f9e"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partDescription}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="188" y="54" width="70" height="70" uuid="d50cf851-4ac5-4c51-8c22-0344464124f6"/>
+				<jr:DataMatrix xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{partNum}]]></jr:codeExpression>
+				</jr:DataMatrix>
+			</componentElement>
+			<textField>
+				<reportElement x="170" y="40" width="100" height="14" uuid="eed586b0-9cc4-4463-b461-b764ecaddd5d"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="136" height="14" uuid="96cdda9f-e095-454d-930e-d3671f959d15"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{partDefaultLocation}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="28" y="56" width="70" height="70" uuid="f08e5dbf-4a9c-4e13-8052-158556ba6c65"/>
+				<jr:DataMatrix xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{lgName} + "-" + $F{partDefaultLocation}]]></jr:codeExpression>
+				</jr:DataMatrix>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PackingList" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2751b915-eca4-4ef4-8443-ca48c10b8047">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="module" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateRange1" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateRange2" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cbApplyDateFilter" class="java.lang.String">
+		<parameterDescription><![CDATA[ship.datecreated,Date Created,ship.dateshipped,Date Shipped]]></parameterDescription>
+		<defaultValueExpression><![CDATA["ship.datecreated"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ckShowKitHeaders" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[80,90]]></parameterDescription>
+		<defaultValueExpression><![CDATA["80"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ckShowCountry" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[1,0]]></parameterDescription>
+		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cbOrderNumber" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[SO,SO Number,PO,Customer PO Number]]></parameterDescription>
+		<defaultValueExpression><![CDATA["PO"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cbLayoutFormat" class="java.lang.String">
+		<parameterDescription><![CDATA[standard,Standard,carton,By Carton]]></parameterDescription>
+		<defaultValueExpression><![CDATA["standard"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ckEntered" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[10,0]]></parameterDescription>
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ckPacked" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[20,0]]></parameterDescription>
+		<defaultValueExpression><![CDATA["0"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ckShipped" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[30,0]]></parameterDescription>
+		<defaultValueExpression><![CDATA["30"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORTDESCRIPTION" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Batch By Date - Packing List for a selected order. Selecting Standard or By Location layouts will include backorder items."]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowBarcode" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowTracking" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colTotalPrice" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colUnitPrice" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colQtyRemaining" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colQtyShipped" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colQtyOrdered" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colPartNumDescription" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colLineNumber" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cbLogoAlignment" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[top,Top,left,Left]]></parameterDescription>
+		<defaultValueExpression><![CDATA["left"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colPartNumber" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ReportTitle" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Packing Slip"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colDescription" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cbContactToShow" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[address,Address Name,contact,SO Contact]]></parameterDescription>
+		<defaultValueExpression><![CDATA["address"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowUniqueShipNumbers" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ckShowBackOrderItems" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[100,101]]></parameterDescription>
+		<defaultValueExpression><![CDATA["100"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCartonInfo" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowDeliverySignature" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCompanyName" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowOrderNotes" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT ship.id AS shipid
+
+FROM ship
+
+WHERE ship.statusid IN ($P{ckEntered},$P{ckPacked},$P{ckShipped})
+  AND $P!{cbApplyDateFilter} BETWEEN $P{dateRange1} AND DATE_SUB($P{dateRange2}, INTERVAL 1 SECOND)]]>
+	</queryString>
+	<field name="SHIPID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<subreport runToBottom="true">
+				<reportElement x="0" y="0" width="612" height="14" isPrintInFirstWholeBand="true" uuid="d6cd6a50-e2a4-4afd-a767-e6368b4e4c88"/>
+				<parametersMapExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></parametersMapExpression>
+				<subreportParameter name="colPartNumDescription">
+					<subreportParameterExpression><![CDATA[$P{colPartNumDescription}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="module">
+					<subreportParameterExpression><![CDATA[$P{module}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="shipID">
+					<subreportParameterExpression><![CDATA[$F{SHIPID}.toString()]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ShowTracking">
+					<subreportParameterExpression><![CDATA[$P{ShowTracking}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="colQtyShipped">
+					<subreportParameterExpression><![CDATA[$P{colQtyShipped}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="colUnitPrice">
+					<subreportParameterExpression><![CDATA[$P{colUnitPrice}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="colQtyRemaining">
+					<subreportParameterExpression><![CDATA[$P{colQtyRemaining}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="cbOrderNumber">
+					<subreportParameterExpression><![CDATA[$P{cbOrderNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="colTotalPrice">
+					<subreportParameterExpression><![CDATA[$P{colTotalPrice}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ckShowCountry">
+					<subreportParameterExpression><![CDATA[$P{ckShowCountry}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ShowBarcode">
+					<subreportParameterExpression><![CDATA[$P{ShowBarcode}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="cbLayoutFormat">
+					<subreportParameterExpression><![CDATA[$P{cbLayoutFormat}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="colQtyOrdered">
+					<subreportParameterExpression><![CDATA[$P{colQtyOrdered}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ckShowKitHeaders">
+					<subreportParameterExpression><![CDATA[$P{ckShowKitHeaders}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="colLineNumber">
+					<subreportParameterExpression><![CDATA[$P{colLineNumber}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["../Ship/PackingList.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

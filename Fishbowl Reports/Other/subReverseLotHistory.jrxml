@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReverseLotHistory" pageWidth="752" pageHeight="572" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="752" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f349ddf1-4879-46c5-bcaa-9aaa4b87b234">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="partNum" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Lot" class="java.lang.String"/>
+	<parameter name="path" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA["../Custom/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="woItemIDs" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  PART.NUM AS PARTNUM, PART.DESCRIPTION, ABS(IL.CHANGEQTY) AS CHANGEQTY, TIL.INFO AS LOT, IL.INFO AS EVENT, ILT.DESCRIPTION AS TYPE, IL.EVENTDATE, IL.ID AS ILID, IL.QTYONHAND, IL.TYPEID, IL.INFO,
+CASE WHEN
+            SUBSTRING(IL.INFO FROM 1 FOR 13) = 'Finished Good'
+     THEN
+            SUBSTRING(IL.INFO FROM 15 FOR 10)
+     ELSE
+            ''
+     END AS WONUMBER, IL.TYPEID AS ILTYPE, COMPANY.NAME AS COMPANY, COALESCE(TAG.QTY,0) AS TAGQTY, COALESCE(TAGEND.QTY,0) AS TAGENDQTY, WOITEMS.WOITEMIDS, vendor.name AS VENDOR, phone.datus AS PHONE, email.datus AS EMAIL
+
+
+FROM    inventorylog il
+        LEFT JOIN tiinventorylog til ON il.id = til.inventorylogid AND til.parttrackingid = 1
+        JOIN part ON il.partid = part.id
+        JOIN inventorylogtype ilt ON il.typeid = ilt.id
+        LEFT JOIN company ON company.id=1
+        LEFT JOIN (SELECT GROUP_CONCAT(woitem.id) AS woitemids, wo.num AS wonum
+                    FROM wo
+                    JOIN woitem ON woitem.woid = wo.id
+                    LEFT JOIN trackinginfo ON trackinginfo.recordid = woitem.id AND trackinginfo.parttrackingid = 1
+                    JOIN part ON woitem.partid = part.id
+                    WHERE woitem.typeid = 20
+                    GROUP BY wo.num) AS woitems ON woitems.wonum = SUBSTRING(il.info FROM (POSITION('#' IN il.info)+1) FOR 20)
+        LEFT JOIN tag ON il.begtagnum = tag.num
+        LEFT JOIN tag tagend ON il.endtagnum = tagend.num
+        LEFT OUTER JOIN (SELECT partrackinfo.invLogid AS invLogid, GROUP_CONCAT(partrackinfo.trackValue, ', ') AS trackValue
+        FROM (SELECT tiinventorylog.inventorylogid AS invLogid, CONCAT(parttracking.abbr, ': ',
+                GROUP_CONCAT((CASE
+		    WHEN parttracking.typeid = 10 THEN tiinventorylog.info
+                    WHEN parttracking.typeid = 20 THEN SUBSTRING(tiinventorylog.infodate FROM 1 FOR 11)
+                    WHEN parttracking.typeid = 30 THEN SUBSTRING(tiinventorylog.infodate FROM 1 FOR 11)
+                    WHEN parttracking.typeid = 40 THEN tiinventorylogsn.serialnum
+                    WHEN parttracking.typeid = 50 THEN CAST(tiinventorylog.infodouble as DECIMAL(18,2))
+                    WHEN parttracking.typeid = 60 THEN CAST(tiinventorylog.infodouble as DECIMAL(18,5))
+                    WHEN parttracking.typeid = 70 THEN tiinventorylog.infointeger
+                    WHEN parttracking.typeid = 80 THEN tiinventorylog.infointeger
+                    ELSE tiinventorylog.info
+                END ))) AS trackValue
+            FROM tiinventorylog
+                INNER JOIN parttracking ON (tiinventorylog.parttrackingid = parttracking.id) AND parttracking.id = 1
+                LEFT OUTER JOIN tiinventorylogsn ON (tiinventorylog.id = tiinventorylogsn.tiinventorylogid)
+                GROUP BY tiinventorylog.inventorylogid, parttracking.abbr, parttracking.sortorder
+            ORDER BY parttracking.sortorder) AS partrackinfo
+        GROUP BY partrackinfo.invLogid) trackinfo ON (il.id = trackinfo.invLogid)
+        LEFT JOIN woitem ON woitem.id = il.recordid AND il.tableid = -355941248
+        LEFT JOIN po ON SUBSTRING(il.info FROM 5 FOR 20) = po.num AND il.typeid = 20
+        LEFT JOIN vendor ON po.vendorid = vendor.id
+        LEFT JOIN contact phone ON vendor.accountid = phone.accountid AND phone.typeid = 50 AND phone.defaultflag = 1
+        LEFT JOIN contact email ON vendor.accountid = email.accountid AND email.typeid = 20 AND email.defaultflag = 1
+
+WHERE   woitem.id IN ($P!{woItemIDs})
+
+
+ORDER BY	part.num, il.eventdate DESC]]>
+	</queryString>
+	<field name="PARTNUM" class="java.lang.String"/>
+	<field name="DESCRIPTION" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CHANGEQTY" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="LOT" class="java.lang.String"/>
+	<field name="EVENT" class="java.lang.String"/>
+	<field name="TYPE" class="java.lang.String"/>
+	<field name="EVENTDATE" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ILID" class="java.lang.Long"/>
+	<field name="QTYONHAND" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TYPEID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="INFO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="WONUMBER" class="java.lang.String"/>
+	<field name="ILTYPE" class="java.lang.Integer"/>
+	<field name="COMPANY" class="java.lang.String"/>
+	<field name="TAGQTY" class="java.math.BigDecimal"/>
+	<field name="TAGENDQTY" class="java.math.BigDecimal"/>
+	<field name="WOITEMIDS" class="java.lang.String"/>
+	<field name="VENDOR" class="java.lang.String"/>
+	<field name="PHONE" class="java.lang.String"/>
+	<field name="EMAIL" class="java.lang.String"/>
+	<variable name="QtyDecimal" class="java.lang.String" resetType="None">
+		<variableExpression><![CDATA[System.getProperty("REPORT_DECIMAL_QTY")]]></variableExpression>
+	</variable>
+	<variable name="SUM_CHANGEQTY" class="java.lang.Double" incrementType="Group" incrementGroup="Log" calculation="Sum">
+		<variableExpression><![CDATA[$F{CHANGEQTY}]]></variableExpression>
+	</variable>
+	<group name="Log">
+		<groupExpression><![CDATA[$F{ILID}]]></groupExpression>
+		<groupFooter>
+			<band height="15">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="298" y="0" width="64" height="14" uuid="e45f92f8-b50f-430b-9ebb-b133911b2ed0"/>
+					<box>
+						<bottomPen lineWidth="0.0" lineColor="#999999"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Open Sans" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CHANGEQTY}]]></textFieldExpression>
+					<patternExpression><![CDATA[$V{QtyDecimal}]]></patternExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="94" height="14" uuid="2380ac50-ae98-49e4-bdce-934e908ea536"/>
+					<box leftPadding="3" rightPadding="3">
+						<bottomPen lineWidth="0.0" lineColor="#999999"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Open Sans" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PARTNUM}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="362" y="0" width="59" height="14" uuid="16b3a0e1-7451-443b-a6b3-c5ed904e358a"/>
+					<box leftPadding="3" rightPadding="3">
+						<bottomPen lineWidth="0.0" lineColor="#999999"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Open Sans" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LOT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="94" y="0" width="123" height="14" uuid="bb79571f-29bb-46e7-ae6f-2d32bfc1d83f"/>
+					<box leftPadding="3" rightPadding="3">
+						<bottomPen lineWidth="0.0" lineColor="#999999"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Open Sans" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{EVENT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="217" y="0" width="81" height="14" uuid="e4d6def3-81d5-4a41-bc61-25035f651a6b"/>
+					<box leftPadding="3" rightPadding="3">
+						<bottomPen lineWidth="0.0" lineColor="#999999"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Open Sans" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{EVENTDATE}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="14" width="732" height="1" uuid="7be97fd9-96e4-4ef5-a605-1486baaf4bf3"/>
+					<graphicElement>
+						<pen lineWidth="0.75" lineColor="#999999"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="94" height="18" isRemoveLineWhenBlank="true" uuid="77a06df4-870e-41f1-a4ef-347a8ae44b30"/>
+				<box leftPadding="3" rightPadding="3">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Open Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Part Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="94" y="0" width="123" height="18" isRemoveLineWhenBlank="true" uuid="985a30ca-3860-4061-b221-5fdc80a3e0ba"/>
+				<box leftPadding="3" rightPadding="3">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Open Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Event]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="298" y="0" width="64" height="18" isRemoveLineWhenBlank="true" uuid="3a7600a9-18e3-429c-8be7-1bc3762c1228"/>
+				<box leftPadding="3" rightPadding="3">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Open Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="0" width="59" height="18" isRemoveLineWhenBlank="true" uuid="c404b8ac-e96a-40ae-a986-ad1773c9bbd1"/>
+				<box leftPadding="3" rightPadding="3">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Open Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lot #]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="217" y="0" width="81" height="18" isRemoveLineWhenBlank="true" uuid="36a9c039-d693-4f19-bda8-b8d048e75019"/>
+				<box leftPadding="3" rightPadding="3">
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Open Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Event Date]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="18" width="732" height="1" uuid="0dfe10b8-7540-4563-ae24-849d7537bc52"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+</jasperReport>

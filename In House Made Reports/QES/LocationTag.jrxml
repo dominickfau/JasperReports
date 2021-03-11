@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LocationTag" columnCount="3" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="186" columnSpacing="13" leftMargin="13" rightMargin="13" topMargin="36" bottomMargin="36" uuid="089bb055-d031-4edb-b745-2d29ae11ffd5">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.x" value="26"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="REPORTDESCRIPTION" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Location Labels for Avery 8160 Labels"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT location.Name AS Name, location.description AS Description, tag.num AS Tag,
+    locationGroup.Name AS LG
+FROM Tag, Location, locationGroup
+WHERE tag.typeID = 10
+  AND location.ID = tag.locationID
+  AND location.locationGroupID = locationGroup.ID
+  AND location.activeflag = 1]]>
+	</queryString>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="DESCRIPTION" class="java.lang.String"/>
+	<field name="TAG" class="java.lang.String"/>
+	<field name="LG" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="72" splitType="Stretch">
+			<line>
+				<reportElement key="" mode="Opaque" x="9" y="21" width="159" height="1" forecolor="#000000" backcolor="#FFFFFF" uuid="37259ad6-c5e1-490c-8f12-de262a062ed3"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.25" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<componentElement>
+				<reportElement key="" x="64" y="22" width="50" height="50" uuid="fa8f468e-96c3-4cc4-8711-7f6870eb658e"/>
+				<jr:DataMatrix xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{LG} + "-" + $F{NAME}]]></jr:codeExpression>
+				</jr:DataMatrix>
+			</componentElement>
+			<textField>
+				<reportElement x="0" y="8" width="185" height="14" uuid="5803674f-6d09-4e77-b1c2-11ce1d523cee"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

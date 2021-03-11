@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SalesOrderInvoice" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="155bb73f-2023-44d0-85f5-63e56db28cac">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="orderNumbers" class="java.lang.String">
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="path" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["../Batch/ByOrder/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="module" class="java.lang.Object" isForPrompting="false">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowBillToEmail" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="REPORTDESCRIPTION" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Batch By Order - Ability to view multiple SO Invoices at one time."]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowBillToPhoneNumber" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowBillToFax" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCountry" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowMemos" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowBarcode" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowBOMOnWOItems" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(true)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colCustomerName" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[Customer Name]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemCurrencyTax" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="Multi Currency"/>
+		<property name="QBVersion" value="!US"/>
+		<parameterDescription><![CDATA[Item Currency Tax Amount]]></parameterDescription>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemCurrencyTotalPrice" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="Multi Currency"/>
+		<parameterDescription><![CDATA[Item Currency Total Price]]></parameterDescription>
+		<defaultValueExpression><![CDATA[Boolean.getBoolean("Multi Currency")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemCurrencyUnitPrice" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="Multi Currency"/>
+		<parameterDescription><![CDATA[Item Currency Unit Price]]></parameterDescription>
+		<defaultValueExpression><![CDATA[Boolean.getBoolean("Multi Currency")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemDescription" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemFulfillmentDate" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemLineNumber" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemNumber" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemNumberAndDescription" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemQuantityOrdered" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemTaxAmount" class="java.lang.Boolean" isForPrompting="false">
+		<property name="QBVersion" value="!US"/>
+		<parameterDescription><![CDATA[Item Tax Amount]]></parameterDescription>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemTaxCode" class="java.lang.Boolean" isForPrompting="false">
+		<property name="QBVersion" value="!US"/>
+		<parameterDescription><![CDATA[Item Tax Code]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemTotalPrice" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[!Boolean.getBoolean("Multi Currency")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemType" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[Boolean.getBoolean("QBVersion,US")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colItemUnitPrice" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[!Boolean.getBoolean("Multi Currency")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colOrderCurrencyCode" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="Multi Currency"/>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colOrderCurrencyRate" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="Multi Currency"/>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colOrderEstimatedTax" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colSalesOrderCarrier" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[Order Carrier]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colSalesOrderFOBPoint" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[Order FOB Point]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colSalesOrderPaymentTerms" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[Order Payment Terms]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colSalesOrderSeller" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[Order Seller]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colSalesOrderShipDate" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[Order Requested Ship Date]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colSalesOrderShippingTerms" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[Order Shipping Terms]]></parameterDescription>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colSalesOrderShipService" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[Order Ship Service]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cbDisplaySeller" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[username,Username,first,First Name,full,Full Name]]></parameterDescription>
+		<defaultValueExpression><![CDATA["username"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cbShowDate" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[issued,Issued,completed,Completed,created,Created,firstship,First Ship,lastmodified,Last Modified,revision,Revision,today,Today]]></parameterDescription>
+		<defaultValueExpression><![CDATA["Issued"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IncludeCustomerPartNumbers" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(true)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowAdjustmentAmounts" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCompanyAddress" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCreditCardNumber" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCurrencyTotals" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="Multi Currency"/>
+		<defaultValueExpression><![CDATA[Boolean.getBoolean("Multi Currency")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowDescriptionOnWOItems" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowHomeCurrency" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="Multi Currency"/>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowHomeCurrencyTotals" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="Multi Currency"/>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowLineItemNotes" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowPayments" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowRevision" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowStatus" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowTotals" class="java.lang.Boolean" isForPrompting="false">
+		<property name="show" value="!Multi Currency"/>
+		<defaultValueExpression><![CDATA[!Boolean.getBoolean("Multi Currency")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowZeroPriceItems" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="OnlyShowBOMPriceAdjustments" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dateRangeNone" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="colDateScheduled" class="java.lang.Boolean" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IsInvoice" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colTaxIntegrationEstimatedTax" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowCompanyName" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowOrderNotes" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AddTaxIntegrationEstimatedTaxToTotal" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cbLogoAlignment" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[top,Top,left,Left]]></parameterDescription>
+		<defaultValueExpression><![CDATA["left"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ShowContact" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<parameter name="colPONumber" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ReportTitle" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ShowTaxRateName" class="java.lang.Boolean" isForPrompting="false">
+		<property name="QBVersion" value="US"/>
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    so.num AS SONUM
+
+FROM so
+
+WHERE so.num IN ($P!{orderNumbers})
+
+ORDER BY so.num]]>
+	</queryString>
+	<field name="SONUM" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<subreport runToBottom="true">
+				<reportElement x="0" y="0" width="612" height="14" isPrintInFirstWholeBand="true" uuid="b8fe89a4-ea45-4b65-8869-3b068eb9b42d"/>
+				<parametersMapExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></parametersMapExpression>
+				<subreportParameter name="IsInvoice">
+					<subreportParameterExpression><![CDATA[true]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="soNum">
+					<subreportParameterExpression><![CDATA[$F{SONUM}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{path} + "../../SalesOrder/SOReport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

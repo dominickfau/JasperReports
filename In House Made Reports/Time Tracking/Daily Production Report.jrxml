@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Daily Production" pageWidth="612" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8ebefde7-e253-4676-9788-36e5834fd15d">
+	<property name="ireport.zoom" value="1.464100000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Start_Date" class="java.util.Date">
+		<parameterDescription><![CDATA[Enter the date to use as start date.]]></parameterDescription>
+	</parameter>
+	<parameter name="End_Date" class="java.util.Date">
+		<parameterDescription><![CDATA[Enter the date to use as end date.]]></parameterDescription>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DATE_FORMAT(buildeff.dateFinished, '%W %M %D %Y') AS dateFinishedFormated, DATE(buildeff.dateFinished) AS dateFinished, buildeff.firstName, buildeff.employeeId, buildeff.processStep, buildeff.partNum, bcpart.description, buildeff.batchQty, buildeff.timeStartToFinish, buildeff.timePerPart, buildeff.timeAllotted, buildeff.efficiency, bcpart.stdCost, bcproduct.price
+FROM buildeff
+LEFT JOIN bcpart ON
+	CASE WHEN UPPER(buildeff.partNum) LIKE 'PK%' THEN CONCAT('PK-', TRIM(LEADING 'PK' FROM UPPER(buildeff.partNum))) = bcpart.num
+    ELSE buildeff.partNum = bcpart.num END
+LEFT JOIN bcproduct ON bcpart.id = bcproduct.partId
+
+WHERE DATE(buildeff.dateFinished) BETWEEN $P{Start_Date} AND $P{End_Date}
+AND buildeff.processStep = 'Build'
+ORDER BY buildeff.dateFinished]]>
+	</queryString>
+	<field name="dateFinishedFormated" class="java.lang.String"/>
+	<field name="dateFinished" class="java.util.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="firstName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="processStep" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="partNum" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="batchQty" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="timeStartToFinish" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="timePerPart" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="timeAllotted" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="efficiency" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="stdCost" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="price" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="employeeId" class="java.lang.Integer"/>
+	<variable name="totalParts" class="java.lang.Integer" resetType="Group" resetGroup="dateFinished" calculation="Sum">
+		<variableExpression><![CDATA[$F{batchQty}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalManufactured" class="java.lang.Double" resetType="Group" resetGroup="dateFinished" calculation="Sum">
+		<variableExpression><![CDATA[$F{batchQty} * $F{price}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="uniquePartNumbers" class="java.lang.Integer" resetType="Group" resetGroup="dateFinished" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{partNum}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalHrsUsed" class="java.lang.Float" resetType="Group" resetGroup="dateFinished" calculation="Sum">
+		<variableExpression><![CDATA[($F{timePerPart} * $F{batchQty}) / 60]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalHrsAllotted" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[($F{timeAllotted} * $F{batchQty}) / 60]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="employeeCount" class="java.lang.Integer" resetType="Group" resetGroup="dateFinished" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{employeeId}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalParts" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$V{totalParts}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalUniqueParts" class="java.lang.Integer" calculation="DistinctCount">
+		<variableExpression><![CDATA[$V{uniquePartNumbers}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalManufactured" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{batchQty} * $F{price}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalHrsUsed" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[($F{timePerPart} * $F{batchQty}) / 60]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalHrsAllocatted" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[($F{timeAllotted} * $F{batchQty}) / 60]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="reportTotalEmployeeCount" class="java.lang.Integer" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{employeeId}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="dateFinished">
+		<groupExpression><![CDATA[$F{dateFinished}]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<textField pattern="">
+					<reportElement mode="Opaque" x="0" y="0" width="572" height="14" backcolor="#CCCCCC" uuid="8aadac22-6ecd-4225-a555-caa3dfada26d"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Date Finished: " + $F{dateFinishedFormated}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="28">
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="230" y="0" width="114" height="14" uuid="332adefc-7e0a-4247-ba68-07cf4f144ee0"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalManufactured}]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement x="0" y="0" width="116" height="14" uuid="b167f8b8-cabe-4b8e-91bc-f5c7a3cfd969"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalParts} + " pcs    " + $V{uniquePartNumbers} + " Unique"]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.00">
+					<reportElement x="344" y="0" width="114" height="14" uuid="290fb6b9-fcc7-45e2-a5db-d3cf443c07c9"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalHrsUsed} + " Hrs"]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.00">
+					<reportElement x="458" y="0" width="114" height="14" uuid="811e8ea5-53e9-4e0c-b45d-4948b86bd1da"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalHrsAllotted}  + " Hrs"]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0">
+					<reportElement x="116" y="0" width="114" height="14" uuid="211a1280-691f-4de0-af7b-8950dd920c2b"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{employeeCount}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="45" splitType="Stretch">
+			<textField pattern="MM-dd-yyyy">
+				<reportElement x="329" y="14" width="71" height="14" uuid="bf779755-f2e8-4951-97ed-070d53b658f9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{End_Date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="572" height="14" uuid="3fe28a30-efe1-428f-9487-77f76a59eda6"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[Daily Production]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="168" y="14" width="74" height="14" uuid="52519cd1-c931-4e14-a484-b9f50ce4daac"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date Range "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="309" y="14" width="20" height="14" uuid="041f9abb-1de4-4fd4-acca-231a7338b6cb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" To  "]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM-dd-yyyy">
+				<reportElement x="242" y="14" width="67" height="14" uuid="42fdde1f-6a6e-4402-ad2b-c8ef522e0871"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Start_Date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="14">
+			<textField pattern="">
+				<reportElement mode="Opaque" x="0" y="0" width="116" height="14" backcolor="#CCCCCC" uuid="7bf18dfa-ced3-4236-ab45-ec3e65093d9f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Parts"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="230" y="0" width="114" height="14" backcolor="#CCCCCC" uuid="7563d907-eb1c-4f20-99bc-e27457b8ab05"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total $ Manufactured"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="344" y="0" width="114" height="14" backcolor="#CCCCCC" uuid="827cd7c9-fbda-4b6b-af9f-05b979303db6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Hrs Used"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="458" y="0" width="114" height="14" backcolor="#CCCCCC" uuid="1d95bc2b-2588-46dc-af2f-2587b431dbd6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Hrs Allotted"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="116" y="0" width="114" height="14" backcolor="#CCCCCC" uuid="e06bd30c-cee8-49d0-b247-ee29c6590e93"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Unique Employees"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<pageFooter>
+		<band height="14">
+			<textField>
+				<reportElement x="452" y="0" width="80" height="14" uuid="adffc4ad-710d-4bef-b593-aa0a8d8beec6"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="0" width="40" height="14" uuid="89f1b389-ac3c-4db3-bd8e-c428b4bd20d2"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-29" mode="Transparent" x="0" y="0" width="452" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="61b6c2f4-8948-4c2a-a804-ae9101b47946"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG)).format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="70">
+			<textField pattern="">
+				<reportElement mode="Opaque" x="0" y="42" width="116" height="14" backcolor="#CCCCCC" uuid="0a333884-7b61-4d77-a6fd-6021316fcd0e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Parts"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="230" y="42" width="114" height="14" backcolor="#CCCCCC" uuid="e907adfb-c27b-4166-bf23-43ac310cf654"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total $ Manufactured"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="344" y="42" width="114" height="14" backcolor="#CCCCCC" uuid="932791f6-8854-47e9-83fa-ecf1a8333ae9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Hrs Used"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="458" y="42" width="114" height="14" backcolor="#CCCCCC" uuid="c9d58711-ac15-4ea5-b8af-b021279211b9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Hrs Allotted"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="116" y="42" width="114" height="14" backcolor="#CCCCCC" uuid="c966918f-989c-4573-ae54-9dd5e73be2d4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Unique Employees"]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="230" y="56" width="114" height="14" uuid="e0946e6a-1fae-41b6-87e0-2e59b69647af"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{reportTotalManufactured}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="0" y="56" width="116" height="14" uuid="24cdef13-ed94-4bad-bcff-2ec3c08b4138"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{reportTotalParts} + " pcs    " + $V{reportTotalUniqueParts} + " Unique"]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="344" y="56" width="114" height="14" uuid="d6e763ce-52d6-48e7-a9c2-58c0d126de0c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{reportTotalHrsUsed} + " Hrs"]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="458" y="56" width="114" height="14" uuid="ba3f3edc-cde0-4fa5-8c99-2047db0f8742"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{reportTotalHrsAllocatted}  + " Hrs"]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="116" y="56" width="114" height="14" uuid="605b039c-7049-4670-8e8d-5dd7c0605c4e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{reportTotalEmployeeCount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement mode="Opaque" x="0" y="28" width="572" height="14" backcolor="#CCCCCC" uuid="eb433537-3d33-465d-bcc7-a00d2ce711cd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Report Totals"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+	<noData>
+		<band height="752">
+			<staticText>
+				<reportElement x="0" y="0" width="572" height="14" uuid="b3786c90-75e1-4be2-afb3-1e04c787c148"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[No Data Found]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="452" y="738" width="80" height="14" uuid="364d091f-64a5-4a49-9236-895723116e26"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-29" mode="Transparent" x="0" y="738" width="452" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="6120dc59-07e1-4222-b6a7-e631e8d5e14d"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(DateFormat.getDateTimeInstance(DateFormat.LONG,DateFormat.LONG)).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="532" y="738" width="40" height="14" uuid="d9760ced-9c49-43f3-8f5f-ae93bafbeb22"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>
