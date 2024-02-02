@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="One Off 2x4 Harness Label Avery" pageWidth="288" pageHeight="144" whenNoDataType="AllSectionsNoDetail" columnWidth="270" leftMargin="9" rightMargin="9" topMargin="9" bottomMargin="9" uuid="90e41a1c-e301-4ced-ba5a-5a75faf0a025">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="1x4 Harness Label" pageWidth="288" pageHeight="72" whenNoDataType="AllSectionsNoDetail" columnWidth="282" leftMargin="3" rightMargin="3" topMargin="3" bottomMargin="3" uuid="90e41a1c-e301-4ced-ba5a-5a75faf0a025">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="2.853116706110004"/>
@@ -12,7 +12,7 @@
 	<style name="18" fontName="SansSerif" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 	<style name="style1" hAlign="Center" vAlign="Middle"/>
 	<parameter name="REPORTDESCRIPTION" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["Part Barcodes for 2x4 Avery 8163 Labels"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["Wire harness labels 1x4."]]></defaultValueExpression>
 	</parameter>
 	<parameter name="partNum" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -21,23 +21,71 @@
 		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
 	</parameter>
 	<parameter name="Builder" class="java.lang.String"/>
-	<parameter name="Qty" class="java.lang.String">
-		<defaultValueExpression><![CDATA["1"]]></defaultValueExpression>
-	</parameter>
+	<parameter name="soNum" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT part.id, part.num AS num,
 part.description AS description,
 customer.name AS customerName,
 customerparts.customerPartNumber AS custNum,
-DATE_FORMAT(curdate(), '%m-%d-%y') AS buildDate
+DATE_FORMAT(curdate(), '%m-%d-%y') AS buildDate,
+split_notes.boat_number,
+so.customerPO
 
 FROM part
 
 LEFT JOIN product ON product.partId = part.id
 LEFT JOIN customerparts ON customerparts.productId = product.id
 LEFT JOIN customer ON customerparts.customerId = customer.id
+LEFT JOIN soitem ON product.id = soitem.productId
+LEFT JOIN so ON so.id = soitem.soId
+LEFT JOIN (SELECT soitem.id AS soItemId, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(soitem.note, ' ', n), ' ', -1)) AS boat_number
 
-WHERE part.num LIKE $P{partNum}]]>
+FROM part
+LEFT JOIN product ON product.partId = part.id
+LEFT JOIN customerparts ON customerparts.productId = product.id
+LEFT JOIN customer ON customerparts.customerId = customer.id
+LEFT JOIN soitem ON product.id = soitem.productId
+LEFT JOIN so ON so.id = soitem.soId
+CROSS JOIN (
+SELECT 1 AS n
+UNION SELECT 2
+UNION SELECT 3
+UNION SELECT 4
+UNION SELECT 5
+UNION SELECT 6
+UNION SELECT 7
+UNION SELECT 8
+UNION SELECT 9
+UNION SELECT 10
+UNION SELECT 11
+UNION SELECT 12
+UNION SELECT 13
+UNION SELECT 14
+UNION SELECT 15
+UNION SELECT 16
+UNION SELECT 17
+UNION SELECT 18
+UNION SELECT 19
+UNION SELECT 20
+UNION SELECT 21
+UNION SELECT 22
+UNION SELECT 23
+UNION SELECT 24
+UNION SELECT 25
+UNION SELECT 26
+UNION SELECT 27
+UNION SELECT 28
+UNION SELECT 29
+UNION SELECT 30
+) AS numbers
+
+WHERE part.num LIKE $P{partNum}
+AND so.num LIKE $P{soNum}
+AND n <= 1 + (LENGTH(soitem.note) - LENGTH(REPLACE(soitem.note, ' ', '')))
+ORDER BY soitem.note, n) split_notes ON soitem.id = split_notes.soItemId
+
+WHERE part.num LIKE $P{partNum}
+AND so.num LIKE $P{soNum}]]>
 	</queryString>
 	<field name="num" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -48,6 +96,8 @@ WHERE part.num LIKE $P{partNum}]]>
 	<field name="customerName" class="java.lang.String"/>
 	<field name="custNum" class="java.lang.String"/>
 	<field name="buildDate" class="java.lang.String"/>
+	<field name="boat_number" class="java.lang.String"/>
+	<field name="customerPO" class="java.lang.String"/>
 	<background>
 		<band/>
 	</background>
@@ -61,44 +111,30 @@ WHERE part.num LIKE $P{partNum}]]>
 		<band/>
 	</columnHeader>
 	<detail>
-		<band height="126">
+		<band height="66">
 			<textField>
-				<reportElement x="0" y="34" width="270" height="15" uuid="8de96575-6143-4809-81f7-619a9982165d"/>
+				<reportElement x="68" y="0" width="214" height="15" uuid="8de96575-6143-4809-81f7-619a9982165d"/>
 				<textElement rotation="None">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Part #: " + $F{num} + " Cust P/N: " + $F{custNum}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="49" width="270" height="15" uuid="65ccb00c-9e01-4685-a26a-0d5fb654ed19"/>
+				<reportElement x="68" y="15" width="214" height="15" uuid="65ccb00c-9e01-4685-a26a-0d5fb654ed19"/>
 				<textElement rotation="None">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Description: " + $F{description}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="81" width="139" height="15" uuid="d752c531-a474-449a-8640-07d02289f83e"/>
-				<textElement rotation="None">
+				<reportElement x="0" y="30" width="282" height="15" uuid="44ca9a95-73a9-4ff1-82b7-9001fda9b7a2"/>
+				<textElement textAlignment="Right" rotation="None">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Build Date: " + $F{buildDate}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="96" width="139" height="15" uuid="44ca9a95-73a9-4ff1-82b7-9001fda9b7a2"/>
-				<textElement rotation="None">
-					<font fontName="Arial" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Checked By: " + $P{Builder}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="111" width="90" height="15" uuid="17fb5ea8-de0e-49c1-aaf4-308af26e527d"/>
-				<textElement rotation="None">
-					<font fontName="Arial" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Qty: " + $P{Qty}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Bennington Boat#: " + $F{boat_number} + " Build Date: " + $F{buildDate}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="RetainShape" hAlign="Center" vAlign="Top" isUsingCache="true">
-				<reportElement key="image-1" mode="Transparent" x="0" y="0" width="270" height="34" forecolor="#000000" backcolor="#FFFFFF" uuid="1805c4fe-c46f-4f10-b9d7-7e59f6beb785">
+				<reportElement key="image-1" mode="Transparent" x="0" y="0" width="68" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="1805c4fe-c46f-4f10-b9d7-7e59f6beb785">
 					<printWhenExpression><![CDATA[new Boolean($P{module} != null)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -112,18 +148,12 @@ WHERE part.num LIKE $P{partNum}]]>
 				</graphicElement>
 				<imageExpression><![CDATA[com.evnt.util.ImageUtil.decodeImage(((com.evnt.eve.modules.ReportHelperModule) $P{module}).getImageData("Company", 1, true))]]></imageExpression>
 			</image>
-			<componentElement>
-				<reportElement x="165" y="111" width="105" height="15" uuid="f5cf811d-2dff-40d3-bfc9-f4972402df3a"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
-					<jr:codeExpression><![CDATA[$F{custNum} == null ? $F{num} : $F{custNum}]]></jr:codeExpression>
-				</jr:barbecue>
-			</componentElement>
 			<textField>
-				<reportElement x="0" y="66" width="139" height="15" uuid="8432336d-1f37-45bb-9214-af3b979b01ef"/>
-				<textElement rotation="None">
+				<reportElement x="0" y="45" width="282" height="15" uuid="7e1a39c5-2c48-4b9e-b373-99ac79c5f57b"/>
+				<textElement textAlignment="Center" rotation="None">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Revision: "]]></textFieldExpression>
+				<textFieldExpression><![CDATA["PO #: " + $F{customerPO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

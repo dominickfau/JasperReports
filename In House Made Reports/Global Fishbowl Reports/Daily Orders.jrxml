@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Daily Order Report" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5e031e37-16e4-4a0f-a4f5-9309e8df2c06">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="11"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -41,6 +41,9 @@
 	<parameter name="soNum" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="cbHarnessSize" class="java.lang.String">
+		<parameterDescription><![CDATA[%,All,Big Boards,Big Boards,Misc,Misc,Panels 1,Panels 1,Panels 2,Panels 2,Small Boards,Small Boards,Trolling,Trolling]]></parameterDescription>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
 so.billToName AS customer ,
@@ -53,18 +56,24 @@ soItem.qtyOrdered AS totalQtyOrdered,
 soItem.qtyFulfilled AS totalQtyShipped,
 (soItem.qtyOrdered - soItem.qtyFulfilled) AS totalQtyLeft,
 DATE_FORMAT(soItem.dateScheduledFulfillment, '%m-%d-%Y') AS reqShipDate,
-so.customerPO AS customerPO
+so.customerPO AS customerPO,
+harnessSize.info AS harnessSizeInfo
 
 FROM so
-LEFT JOIN soitem ON soitem.soid = so.id
-LEFT JOIN customer ON customer.id = so.customerId
+JOIN soitem ON soitem.soid = so.id
+JOIN product ON soitem.productId = product.id
+LEFT JOIN part ON product.partId = part.id
+LEFT JOIN customset harnessSize ON part.id = harnessSize.recordId AND harnessSize.customFieldId = (SELECT id FROM customfield WHERE name = "Harness Size")
+
+JOIN customer ON customer.id = so.customerId
 
 WHERE so.statusId <= 40
 AND so.num LIKE $P{soNum}
 AND customer.id LIKE $P{customerID}
 AND so.dateCalStart BETWEEN $P{dateRange1} AND $P{dateRange2}
 AND soItem.statusId <= 40
-ORDER BY soItem.dateScheduledFulfillment, so.num, customer.name, soItem.productNum]]>
+AND harnessSize.info LIKE $P{cbHarnessSize}
+ORDER BY harnessSize.info, soItem.dateScheduledFulfillment, so.num, customer.name, soItem.productNum]]>
 	</queryString>
 	<field name="customer" class="java.lang.String"/>
 	<field name="custPO" class="java.lang.String"/>
@@ -78,70 +87,89 @@ ORDER BY soItem.dateScheduledFulfillment, so.num, customer.name, soItem.productN
 	<field name="totalQtyShipped" class="java.math.BigDecimal"/>
 	<field name="totalQtyLeft" class="java.math.BigDecimal"/>
 	<field name="reqShipDate" class="java.lang.String"/>
-	<field name="customerPO" class="java.lang.String"/>
+	<field name="customerPO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="harnessSizeInfo" class="java.lang.String"/>
 	<variable name="DateFormat" class="java.lang.String" resetType="None">
 		<variableExpression><![CDATA[(System.getProperty("REPORT_DATE_FORMAT"))]]></variableExpression>
 	</variable>
 	<group name="soNum" keepTogether="true">
 		<groupExpression><![CDATA[$F{soNum}]]></groupExpression>
 		<groupHeader>
-			<band height="28">
+			<band height="46">
 				<textField isStretchWithOverflow="true">
-					<reportElement x="0" y="0" width="752" height="16" uuid="b9223ec1-aab7-4930-9bf7-f263384e5f18"/>
+					<reportElement x="0" y="15" width="752" height="16" uuid="b9223ec1-aab7-4930-9bf7-f263384e5f18"/>
 					<textElement verticalAlignment="Top">
 						<font size="10" isBold="true" isStrikeThrough="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA["SO Number: " + $F{soNum} + " Cust: " + $F{customer} + " CustPO: " + $F{customerPO}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="105" y="16" width="67" height="12" uuid="4ec28abb-e8b7-4c35-b39e-2cfefa4c9971"/>
+					<reportElement x="105" y="31" width="67" height="12" uuid="4ec28abb-e8b7-4c35-b39e-2cfefa4c9971"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Part #]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="172" y="16" width="100" height="12" uuid="7e63563d-922f-4e59-82ee-1c83720d0c97"/>
+					<reportElement x="172" y="31" width="100" height="12" uuid="7e63563d-922f-4e59-82ee-1c83720d0c97"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Cust. PN]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="505" y="16" width="56" height="12" uuid="7ae1cb30-233b-4b2a-8354-ded79467a9e7"/>
+					<reportElement x="505" y="31" width="56" height="12" uuid="7ae1cb30-233b-4b2a-8354-ded79467a9e7"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Qty Orderd]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="561" y="16" width="62" height="12" uuid="ba002d5a-27f0-4e98-9942-1cb3af54c388"/>
+					<reportElement x="561" y="31" width="62" height="12" uuid="ba002d5a-27f0-4e98-9942-1cb3af54c388"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Qty Shiped]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="689" y="16" width="63" height="12" uuid="8e1f01b6-b439-434b-9991-a01fbec33e17"/>
+					<reportElement x="689" y="31" width="63" height="12" uuid="8e1f01b6-b439-434b-9991-a01fbec33e17"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Req. Ship Date]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="623" y="16" width="66" height="12" uuid="6cc6967a-e034-4451-9912-17e5daff229a"/>
+					<reportElement x="623" y="31" width="66" height="12" uuid="6cc6967a-e034-4451-9912-17e5daff229a"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Qty Left To Ship]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="272" y="16" width="233" height="12" uuid="dc60f8bc-e3ad-4e10-901f-be8d12f36c20"/>
+					<reportElement x="272" y="31" width="233" height="12" uuid="dc60f8bc-e3ad-4e10-901f-be8d12f36c20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Description]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement key="textField-26" mode="Transparent" x="0" y="1" width="752" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="560766f1-89de-4832-b68d-7e57fa609b74">
+						<printWhenExpression><![CDATA[true]]></printWhenExpression>
+					</reportElement>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</box>
+					<textElement verticalAlignment="Bottom" rotation="None">
+						<font fontName="Open Sans" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{harnessSizeInfo}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>

@@ -169,8 +169,11 @@ ORDER BY 5,4, 1]]>
 	<parameter name="ShowVendorName" class="java.lang.Boolean" isForPrompting="false">
 		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
 	</parameter>
+	<parameter name="ShowItemNotes" class="java.lang.Boolean" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Boolean(false)]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT $P!{cbGroupBy} AS "Group", locationgroup.name AS LG, poitem.totalcost AS poitemtotalcost,
+		<![CDATA[SELECT $P!{cbGroupBy} AS "Group", locationgroup.name AS LG, poitem.totalcost AS poitemtotalcost, poitem.note as poItemNote,
     poitem.datescheduledfulfillment AS poitemdatescheduledfulfillment, poitem.unitcost AS poitemUnitCost, poitem.qtytofulfill AS poitemqtytofulfill,
     poitem.qtyfulfilled AS poitemqtyfulfilled, poitem.partnum AS poitempartnum, poitem.datelastfulfillment AS poitemdatelastfulfillment,
     poitem.description AS poitemdescription, poitem.note AS poitemnote, poitem.polineitem AS polineitem, poitem.revlevel AS poitemrevlevel,
@@ -251,6 +254,7 @@ ORDER BY locationgroup.name, 1]]>
 	<field name="PARTID" class="java.lang.Integer"/>
 	<field name="POITEMSTATUS" class="java.lang.Integer"/>
 	<field name="SYMBOL" class="java.lang.Integer"/>
+	<field name="poItemNote" class="java.lang.String"/>
 	<variable name="newCost" class="java.lang.Double" resetType="None">
 		<variableExpression><![CDATA[new Double($F{NEWQTY}.doubleValue()*$F{POITEMUNITCOST}.doubleValue())]]></variableExpression>
 	</variable>
@@ -912,7 +916,20 @@ com.fbi.sdk.constants.setup.CurrencySymbolConst.getFormattedCurrency($F{SYMBOL},
 				<patternExpression><![CDATA[$V{CostDecimal}]]></patternExpression>
 			</textField>
 		</band>
-		<band height="1" splitType="Prevent">
+		<band height="14" splitType="Prevent">
+			<printWhenExpression><![CDATA[!$F{poItemNote}.isEmpty() & $P{ShowItemNotes}]]></printWhenExpression>
+			<textField>
+				<reportElement x="20" y="0" width="390" height="14" uuid="9e795ec5-c02f-45de-a08e-b0fa1fdb84c9"/>
+				<textFieldExpression><![CDATA["Notes: " + $F{poItemNote}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="1">
+			<line>
+				<reportElement positionType="Float" x="0" y="0" width="731" height="1" uuid="8551a86b-3717-42dd-ad1e-25f1834f135c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
+				</graphicElement>
+			</line>
 			<componentElement>
 				<reportElement key="table" x="20" y="0" width="711" height="0" isRemoveLineWhenBlank="true" uuid="9ca3858b-17b3-4a60-9996-b7b3ac8e7f08">
 					<printWhenExpression><![CDATA[$P{cbGroupBy}.equals("po.num")]]></printWhenExpression>
@@ -1041,12 +1058,6 @@ com.fbi.sdk.constants.setup.CurrencySymbolConst.getFormattedCurrency($F{SYMBOL},
 					</jr:column>
 				</jr:table>
 			</componentElement>
-			<line>
-				<reportElement positionType="Float" x="0" y="0" width="731" height="1" uuid="8551a86b-3717-42dd-ad1e-25f1834f135c"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#CCCCCC"/>
-				</graphicElement>
-			</line>
 		</band>
 	</detail>
 	<columnFooter>
